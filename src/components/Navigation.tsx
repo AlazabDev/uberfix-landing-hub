@@ -11,6 +11,7 @@ const Navigation = () => {
     { path: "/", label: "الرئيسية" },
     { path: "/services", label: "الخدمات" },
     { path: "/projects", label: "المشروعات" },
+    { path: "/branches", label: "الفروع" },
     { path: "/about", label: "عن الشركة" },
     { path: "/contact", label: "اتصل بنا" },
   ];
