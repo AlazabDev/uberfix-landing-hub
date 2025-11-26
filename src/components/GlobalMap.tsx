@@ -143,7 +143,7 @@ const GlobalMap = () => {
 
   return (
     <section className="relative py-20 bg-background overflow-hidden" style={{ backgroundColor: 'hsl(222, 47%, 11%)' }}>
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0f172a22] to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#e5e5e522] to-transparent pointer-events-none" />
 
       
       <div className="container mx-auto px-4 relative z-10">
