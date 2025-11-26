@@ -4,109 +4,196 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 
-// بيانات الفروع
-const branches = [
-  {
-    id: 1,
-    name: 'فرع المعادي',
-    address: 'شارع النصر، المعادي، القاهرة',
-    phone: '01090909006',
-    coordinates: [31.2758, 29.9602] as [number, number],
-  },
-  {
-    id: 2,
-    name: 'فرع مدينة نصر',
-    address: 'شارع عباس العقاد، مدينة نصر، القاهرة',
-    phone: '01210101088',
-    coordinates: [31.3375, 30.0594] as [number, number],
-  },
-  {
-    id: 3,
-    name: 'فرع الإسكندرية',
-    address: 'طريق الكورنيش، الإسكندرية',
-    phone: '01090909007',
-    coordinates: [29.9187, 31.2001] as [number, number],
-  },
-  {
-    id: 4,
-    name: 'فرع الجيزة',
-    address: 'شارع الهرم، الجيزة',
-    phone: '01210101089',
-    coordinates: [31.2088, 29.9872] as [number, number],
-  },
+// أيقونات الفنيين
+const technicianIcons = [
+  '/icons/tec-19.png',
+  '/icons/tec-20.png',
+  '/icons/tec-21.png',
+  '/icons/tec-22.png',
+  '/icons/tec-23.png',
+  '/icons/tec-24.png',
 ];
+
+interface BranchLocation {
+  name: string;
+  latitude: number;
+  longitude: number;
+  url?: string;
+}
 
 const BranchesMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [mapboxToken, setMapboxToken] = useState('');
   const [isTokenSet, setIsTokenSet] = useState(false);
+  const [branches, setBranches] = useState<BranchLocation[]>([]);
+
+  // تحميل بيانات الفروع
+  useEffect(() => {
+    fetch('/data/branch_locations.json')
+      .then(res => res.json())
+      .then(data => setBranches(data))
+      .catch(err => console.error('Error loading branches:', err));
+  }, []);
 
   useEffect(() => {
-    if (!mapContainer.current || !isTokenSet || !mapboxToken) return;
+    if (!mapContainer.current || !isTokenSet || !mapboxToken || branches.length === 0) return;
 
     mapboxgl.accessToken = mapboxToken;
+
+    // حساب المركز بناءً على جميع الفروع
+    const centerLat = branches.reduce((sum, b) => sum + b.latitude, 0) / branches.length;
+    const centerLng = branches.reduce((sum, b) => sum + b.longitude, 0) / branches.length;
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/light-v11',
-      center: [31.2357, 30.0444], // Cairo center
-      zoom: 9,
+      center: [centerLng, centerLat],
+      zoom: 11,
     });
 
     // إضافة عناصر التحكم
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
     // إضافة علامات الفروع
-    branches.forEach((branch) => {
-      // إنشاء عنصر HTML مخصص للعلامة
+    branches.forEach((branch, index) => {
+      // اختيار أيقونة فني عشوائية
+      const randomTechIcon = technicianIcons[Math.floor(Math.random() * technicianIcons.length)];
+      
+      // إنشاء عنصر HTML مخصص للعلامة المزدوجة
       const el = document.createElement('div');
-      el.className = 'custom-marker';
+      el.className = 'custom-marker-container';
       el.style.cssText = `
-        width: 40px;
-        height: 40px;
-        background-color: #f5bf23;
-        border: 3px solid #1e293b;
-        border-radius: 50%;
+        position: relative;
+        width: 50px;
+        height: 70px;
         cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s;
       `;
-      el.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-        <circle cx="12" cy="10" r="3"></circle>
-      </svg>`;
 
+      // الأيقونة الرئيسية (5060)
+      const mainIcon = document.createElement('img');
+      mainIcon.src = '/icons/icon-5060.png';
+      mainIcon.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50px;
+        height: 70px;
+        animation: pulse-icon 2s ease-in-out infinite;
+        animation-delay: ${index * 0.1}s;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        transition: transform 0.3s ease;
+      `;
+
+      // الأيقونة الثانوية (فني عشوائي)
+      const techIcon = document.createElement('img');
+      techIcon.src = randomTechIcon;
+      techIcon.style.cssText = `
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: 40px;
+        height: 60px;
+        animation: pulse-icon-secondary 2.5s ease-in-out infinite;
+        animation-delay: ${index * 0.15}s;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        transition: transform 0.3s ease;
+      `;
+
+      el.appendChild(mainIcon);
+      el.appendChild(techIcon);
+
+      // تأثيرات الهوفر
       el.addEventListener('mouseenter', () => {
-        el.style.transform = 'scale(1.1)';
+        mainIcon.style.transform = 'scale(1.15) translateY(-5px)';
+        techIcon.style.transform = 'scale(1.15) translateY(-5px)';
       });
       el.addEventListener('mouseleave', () => {
-        el.style.transform = 'scale(1)';
+        mainIcon.style.transform = 'scale(1) translateY(0)';
+        techIcon.style.transform = 'scale(1) translateY(0)';
       });
 
       // إنشاء Popup
-      const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(`
-        <div style="padding: 8px; direction: rtl;">
-          <h3 style="font-weight: bold; margin-bottom: 8px; color: #1e293b;">${branch.name}</h3>
-          <p style="margin-bottom: 4px; color: #64748b;">${branch.address}</p>
-          <p style="color: #f5bf23; font-weight: 600;">${branch.phone}</p>
+      const popupContent = `
+        <div style="padding: 12px; direction: rtl; min-width: 200px;">
+          <h3 style="font-weight: bold; margin-bottom: 8px; color: #1e293b; font-size: 16px;">${branch.name}</h3>
+          <div style="margin-top: 8px;">
+            <p style="color: #64748b; font-size: 13px; margin-bottom: 4px;">
+              <strong>الإحداثيات:</strong><br/>
+              ${branch.latitude.toFixed(6)}, ${branch.longitude.toFixed(6)}
+            </p>
+            ${branch.url ? `
+              <a href="${branch.url}" target="_blank" rel="noopener noreferrer" 
+                 style="display: inline-block; margin-top: 8px; color: #f5bf23; font-weight: 600; text-decoration: none; font-size: 13px;">
+                📍 فتح في خرائط Google
+              </a>
+            ` : ''}
+          </div>
         </div>
-      `);
+      `;
+
+      const popup = new mapboxgl.Popup({ 
+        offset: 35,
+        closeButton: true,
+        closeOnClick: false,
+        maxWidth: '300px'
+      }).setHTML(popupContent);
 
       // إضافة Marker للخريطة
       new mapboxgl.Marker(el)
-        .setLngLat(branch.coordinates)
+        .setLngLat([branch.longitude, branch.latitude])
         .setPopup(popup)
         .addTo(map.current!);
     });
 
+    // إضافة CSS للأنيميشن
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes pulse-icon {
+        0%, 100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.85;
+          transform: scale(1.08);
+        }
+      }
+      
+      @keyframes pulse-icon-secondary {
+        0%, 100% {
+          opacity: 1;
+          transform: scale(1) rotate(0deg);
+        }
+        50% {
+          opacity: 0.9;
+          transform: scale(1.05) rotate(2deg);
+        }
+      }
+
+      .mapboxgl-popup-content {
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .mapboxgl-popup-close-button {
+        font-size: 20px;
+        padding: 4px 8px;
+        color: #64748b;
+      }
+
+      .mapboxgl-popup-close-button:hover {
+        background-color: rgba(245, 191, 35, 0.1);
+        color: #f5bf23;
+      }
+    `;
+    document.head.appendChild(style);
+
     return () => {
       map.current?.remove();
+      document.head.removeChild(style);
     };
-  }, [isTokenSet, mapboxToken]);
+  }, [isTokenSet, mapboxToken, branches]);
 
   const handleTokenSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,6 +244,13 @@ const BranchesMap = () => {
   return (
     <div className="w-full h-[600px] rounded-xl overflow-hidden shadow-elevated">
       <div ref={mapContainer} className="w-full h-full" />
+      {branches.length > 0 && (
+        <div className="text-center mt-4 text-muted-foreground" dir="rtl">
+          <p className="text-sm">
+            📍 يتم عرض <strong className="text-secondary">{branches.length}</strong> موقع
+          </p>
+        </div>
+      )}
     </div>
   );
 };
