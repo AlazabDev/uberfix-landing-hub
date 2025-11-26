@@ -27,7 +27,7 @@ const CTA = () => {
             <Button 
               size="lg" 
               variant="outline"
-              className="border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10"
+              className="w-full mt-4 bg-secondary text-secondary-foreground hover:bg-secondary/90"
               onClick={() => window.open('https://uberfix.shop/demo', '_blank')}
             >
               احجز عرض توضيحي
