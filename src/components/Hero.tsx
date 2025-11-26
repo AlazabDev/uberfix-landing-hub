@@ -28,6 +28,7 @@ const Hero = () => {
             <Button 
               size="lg" 
               className="bg-gradient-primary hover:opacity-90 text-primary-foreground shadow-elevated group"
+              onClick={() => window.open('https://uberfix.shop', '_blank')}
             >
               ابدأ الآن
               <ArrowLeft className="mr-2 h-5 w-5 group-hover:-translate-x-1 transition-transform" />
@@ -36,6 +37,7 @@ const Hero = () => {
               size="lg" 
               variant="outline"
               className="border-2 hover:bg-muted"
+              onClick={() => window.open('https://uberfix.shop/about', '_blank')}
             >
               تعرف على المزيد
             </Button>

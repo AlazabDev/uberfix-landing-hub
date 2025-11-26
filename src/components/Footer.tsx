@@ -23,10 +23,11 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-foreground mb-4">روابط سريعة</h3>
             <ul className="space-y-2 text-muted-foreground">
-              <li><a href="#" className="hover:text-primary transition-colors">الرئيسية</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">الخدمات</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">من نحن</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">اتصل بنا</a></li>
+              <li><a href="/" className="hover:text-primary transition-colors">الرئيسية</a></li>
+              <li><a href="/services" className="hover:text-primary transition-colors">الخدمات</a></li>
+              <li><a href="/about" className="hover:text-primary transition-colors">من نحن</a></li>
+              <li><a href="/contact" className="hover:text-primary transition-colors">اتصل بنا</a></li>
+              <li><a href="https://uberfix.shop" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">التطبيق</a></li>
             </ul>
           </div>
 
@@ -41,8 +42,14 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-border pt-8 text-center text-muted-foreground">
-          <p>Al-Azab Construction Company… D-U-N-S No.: 849203826 … All rights reserved © 2025</p>
+        <div className="border-t border-border pt-8 text-center">
+          <p className="text-muted-foreground mb-2">Al-Azab Construction Company… D-U-N-S No.: 849203826</p>
+          <p className="text-muted-foreground">
+            All rights reserved © 2025 | 
+            <a href="https://uberfix.shop" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline mx-2">
+              uberfix.shop
+            </a>
+          </p>
         </div>
       </div>
     </footer>

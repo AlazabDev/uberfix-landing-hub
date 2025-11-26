@@ -20,15 +20,54 @@ const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validation
+    const nameRegex = /^[\u0621-\u064Aa-zA-Z\s]{2,100}$/;
+    const phoneRegex = /^01[0-9]{9}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!nameRegex.test(formData.name.trim())) {
+      toast({
+        title: "خطأ في الإدخال",
+        description: "يرجى إدخال اسم صحيح (حروف فقط، من 2-100 حرف)",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!phoneRegex.test(formData.phone.trim())) {
+      toast({
+        title: "خطأ في رقم الهاتف",
+        description: "يرجى إدخال رقم هاتف مصري صحيح (01xxxxxxxxx)",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!emailRegex.test(formData.email.trim())) {
+      toast({
+        title: "خطأ في البريد الإلكتروني",
+        description: "يرجى إدخال بريد إلكتروني صحيح",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (formData.message.trim().length < 10 || formData.message.trim().length > 1000) {
+      toast({
+        title: "خطأ في الرسالة",
+        description: "يجب أن تكون الرسالة بين 10-1000 حرف",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     // Create WhatsApp message
-    const whatsappMessage = `
-مرحباً، أنا ${formData.name}
-الهاتف: ${formData.phone}
-البريد: ${formData.email}
+    const whatsappMessage = `مرحباً، أنا ${formData.name.trim()}
+الهاتف: ${formData.phone.trim()}
+البريد: ${formData.email.trim()}
 
 الرسالة:
-${formData.message}
-    `.trim();
+${formData.message.trim()}`;
 
     const whatsappUrl = `https://wa.me/201090909006?text=${encodeURIComponent(whatsappMessage)}`;
     
@@ -75,6 +114,7 @@ ${formData.message}
                       setFormData({ ...formData, name: e.target.value })
                     }
                     placeholder="أدخل اسمك الكامل"
+                    maxLength={100}
                   />
                 </div>
                 <div>
@@ -87,6 +127,8 @@ ${formData.message}
                       setFormData({ ...formData, phone: e.target.value })
                     }
                     placeholder="01234567890"
+                    maxLength={11}
+                    pattern="01[0-9]{9}"
                   />
                 </div>
                 <div>
@@ -99,6 +141,7 @@ ${formData.message}
                       setFormData({ ...formData, email: e.target.value })
                     }
                     placeholder="example@email.com"
+                    maxLength={255}
                   />
                 </div>
                 <div>
@@ -111,6 +154,8 @@ ${formData.message}
                     }
                     placeholder="اكتب رسالتك هنا..."
                     rows={5}
+                    maxLength={1000}
+                    minLength={10}
                   />
                 </div>
                 <Button

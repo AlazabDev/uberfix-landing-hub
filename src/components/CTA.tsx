@@ -20,6 +20,7 @@ const CTA = () => {
               size="lg" 
               variant="secondary"
               className="bg-background text-primary hover:bg-background/90 shadow-elevated"
+              onClick={() => window.open('https://uberfix.shop', '_blank')}
             >
               ابدأ مجاناً
             </Button>
@@ -27,6 +28,7 @@ const CTA = () => {
               size="lg" 
               variant="outline"
               className="border-2 border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10"
+              onClick={() => window.open('https://uberfix.shop/demo', '_blank')}
             >
               احجز عرض توضيحي
             </Button>
