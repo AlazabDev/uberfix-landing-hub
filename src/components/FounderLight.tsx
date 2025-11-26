@@ -3,20 +3,9 @@ import { Button } from "@/components/ui/button";
 export default function FounderLight() {
   return (
     <section
-      className="relative py-24 bg-[#0f172a] text-center"
+      className="relative py-24 bg-[#0f172a] text-center overflow-hidden"
       dir="rtl"
     >
-      {/* خلفية الكرة الأرضية بنفس اللون */}
-      <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage:
-            "url('https://al-azab.co/assets/img/earth-dark.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
-
       <div className="container relative z-10 mx-auto px-6">
         
         {/* صورة المؤسس */}
@@ -35,7 +24,7 @@ export default function FounderLight() {
         <p className="max-w-3xl mx-auto text-lg text-gray-300 leading-relaxed mt-4">
           بدأت القصة من الميدان… من الصيانة… من التعب الحقيقي.  
           رحلة طويلة من التعلم والانضباط وبناء الثقة،  
-          حتى تأسست شركة العزب لتصبح واحدة من أسرع المنظومات نموًا في السوق المصري،  
+          حتى تأسست شركة العزب لتصبح واحدة من اسرع المنظومات نموًا في السوق المصري،  
           وتقدم حلولًا متكاملة للهندسة والتشغيل والصيانة.
         </p>
 
