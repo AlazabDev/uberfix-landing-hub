@@ -24,8 +24,7 @@ interface BranchLocation {
 const BranchesMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState('');
-  const [isTokenSet, setIsTokenSet] = useState(false);
+  const mapboxToken = 'pk.eyJ1IjoiYWRtaW51YmVyZml4IiwiYSI6ImNtaWZsOGx2cTBldDYzaXM5YXV4bWFyc3QifQ.j_p5UoorYTcmJoGt_eEZ3w';
   const [branches, setBranches] = useState<BranchLocation[]>([]);
 
   // تحميل بيانات الفروع
@@ -37,7 +36,7 @@ const BranchesMap = () => {
   }, []);
 
   useEffect(() => {
-    if (!mapContainer.current || !isTokenSet || !mapboxToken || branches.length === 0) return;
+    if (!mapContainer.current || !mapboxToken || branches.length === 0) return;
 
     mapboxgl.accessToken = mapboxToken;
 
@@ -193,53 +192,7 @@ const BranchesMap = () => {
       map.current?.remove();
       document.head.removeChild(style);
     };
-  }, [isTokenSet, mapboxToken, branches]);
-
-  const handleTokenSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (mapboxToken.trim()) {
-      setIsTokenSet(true);
-    }
-  };
-
-  if (!isTokenSet) {
-    return (
-      <div className="flex items-center justify-center min-h-[500px] p-4">
-        <Card className="p-8 max-w-md w-full">
-          <h3 className="text-2xl font-bold mb-4 text-center" dir="rtl">
-            أدخل Mapbox Token
-          </h3>
-          <p className="text-muted-foreground mb-6 text-center" dir="rtl">
-            للحصول على Token، قم بزيارة{' '}
-            <a
-              href="https://account.mapbox.com/access-tokens/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-secondary hover:underline"
-            >
-              mapbox.com
-            </a>
-          </p>
-          <form onSubmit={handleTokenSubmit} className="space-y-4">
-            <Input
-              type="text"
-              placeholder="أدخل Mapbox Access Token"
-              value={mapboxToken}
-              onChange={(e) => setMapboxToken(e.target.value)}
-              required
-              dir="ltr"
-            />
-            <button
-              type="submit"
-              className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 py-2 px-4 rounded-lg font-medium transition-colors"
-            >
-              تفعيل الخريطة
-            </button>
-          </form>
-        </Card>
-      </div>
-    );
-  }
+  }, [mapboxToken, branches]);
 
   return (
     <div className="w-full h-[600px] rounded-xl overflow-hidden shadow-elevated">
