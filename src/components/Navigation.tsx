@@ -1,21 +1,33 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  const links = [
+  const mainLinks = [
     { path: "/", label: "الرئيسية" },
     { path: "/services", label: "الخدمات" },
     { path: "/projects", label: "المشروعات" },
     { path: "/branches", label: "الفروع" },
     { path: "/about", label: "عن الشركة" },
-    { path: "/faq", label: "الأسئلة الشائعة" },
     { path: "/contact", label: "اتصل بنا" },
   ];
+
+  const moreLinks = [
+    { path: "/faq", label: "الأسئلة الشائعة" },
+    { path: "/technicians", label: "انضم كفني" },
+  ];
+
+  const allLinks = [...mainLinks, ...moreLinks];
 
   return (
     <nav className="bg-primary text-primary-foreground sticky top-0 z-50 shadow-lg" dir="rtl">
@@ -29,8 +41,8 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {links.map((link) => (
+          <div className="hidden md:flex items-center gap-6">
+            {mainLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -43,11 +55,44 @@ const Navigation = () => {
                 {link.label}
               </Link>
             ))}
+            
+            {/* Dropdown Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-1 text-sm font-medium text-white/90 hover:text-secondary transition-colors">
+                  المزيد
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent 
+                align="end" 
+                className="bg-card border-border min-w-[180px] z-[100]"
+              >
+                {moreLinks.map((link) => (
+                  <DropdownMenuItem key={link.path} asChild>
+                    <Link
+                      to={link.path}
+                      className={`w-full cursor-pointer ${
+                        location.pathname === link.path
+                          ? "text-secondary"
+                          : "text-foreground"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Button
               size="sm"
               className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              asChild
             >
-              ابدأ الآن
+              <a href="https://uberfix.shop" target="_blank" rel="noopener noreferrer">
+                ابدأ الآن
+              </a>
             </Button>
           </div>
 
@@ -63,7 +108,7 @@ const Navigation = () => {
         {/* Mobile Navigation */}
         {isOpen && (
           <div className="md:hidden pb-4">
-            {links.map((link) => (
+            {allLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
@@ -80,8 +125,11 @@ const Navigation = () => {
             <Button
               size="sm"
               className="w-full mt-4 bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              asChild
             >
-              ابدأ الآن
+              <a href="https://uberfix.shop" target="_blank" rel="noopener noreferrer">
+                ابدأ الآن
+              </a>
             </Button>
           </div>
         )}
