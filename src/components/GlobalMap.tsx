@@ -12,19 +12,36 @@ interface BranchLocation {
 const GlobalMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
+  const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
   const [branches, setBranches] = useState<BranchLocation[]>([]);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/data/branch_locations.json')
-      .then(response => response.json())
-      .then(data => setBranches(data))
-      .catch(error => console.error('Error loading branch locations:', error));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to load branch locations');
+        }
+        return response.json();
+      })
+      .then((data) => setBranches(data))
+      .catch((error) => {
+        console.error('Error loading branch locations:', error);
+        setMapError('تعذر تحميل مواقع الفروع حاليًا.');
+      });
   }, []);
 
   useEffect(() => {
     if (!mapContainer.current || branches.length === 0) return;
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYWRtaW51YmVyZml4IiwiYSI6ImNtaWZsOGx2cTBldDYzaXM5YXV4bWFyc3QifQ.j_p5UoorYTcmJoGt_eEZ3w';
+    if (!mapboxToken) {
+      setMapError('مطلوب مفتاح Mapbox صالح لعرض الخريطة.');
+      return;
+    }
+
+    setMapError(null);
+
+    mapboxgl.accessToken = mapboxToken;
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -33,6 +50,10 @@ const GlobalMap = () => {
       zoom: 1.5,
       center: [30, 20],
       pitch: 0,
+    });
+
+    map.current.on('error', () => {
+      setMapError('حدث خطأ أثناء تحميل الخريطة. يرجى المحاولة لاحقًا.');
     });
 
     map.current.addControl(
@@ -139,7 +160,7 @@ const GlobalMap = () => {
     return () => {
       map.current?.remove();
     };
-  }, [branches]);
+  }, [branches, mapboxToken]);
 
   return (
     <section className="relative py-20 bg-background overflow-hidden" style={{ backgroundColor: '#f4f4f4' }}>
@@ -149,7 +170,7 @@ const GlobalMap = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12 animate-fade-in" dir="rtl">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            شبكة عالمية من 
+            شبكة عالمية من
             <span className="bg-gradient-primary bg-clip-text text-transparent"> الشركاء</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -159,12 +180,20 @@ const GlobalMap = () => {
 
         <div className="relative rounded-2xl overflow-hidden shadow-elevated animate-scale-in" style={{ height: '600px' }}>
           <div ref={mapContainer} className="absolute inset-0" />
-          
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-card/90 backdrop-blur-sm px-6 py-3 rounded-full border border-border shadow-lg" dir="rtl">
-            <p className="text-sm text-foreground font-medium">
-              🌍 {branches.length} موقع نشط • <span className="text-primary">خدمة 24/7</span>
-            </p>
-          </div>
+
+          {mapError ? (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+              <p className="text-base font-medium text-muted-foreground" dir="rtl">
+                {mapError}
+              </p>
+            </div>
+          ) : (
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-card/90 backdrop-blur-sm px-6 py-3 rounded-full border border-border shadow-lg" dir="rtl">
+              <p className="text-sm text-foreground font-medium">
+                🌍 {branches.length} موقع نشط • <span className="text-primary">خدمة 24/7</span>
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </section>
