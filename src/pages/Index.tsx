@@ -6,7 +6,9 @@ import HowItWorks from "@/components/HowItWorks";
 import Services from "@/components/Services";
 import About from "@/components/About";
 import Testimonials from "@/components/Testimonials";
+import MaintenanceTimeline from "@/components/MaintenanceTimeline";
 import FounderLight from "@/components/FounderLight";
+import TechnicianCTA from "@/components/TechnicianCTA";
 import GlobalMap from "@/components/GlobalMap";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
@@ -22,7 +24,9 @@ const Index = () => {
       <Services />
       <About />
       <Testimonials />
+      <MaintenanceTimeline />
       <FounderLight />
+      <TechnicianCTA />
       <GlobalMap />
       <CTA />
       <Footer />

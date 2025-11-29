@@ -29,21 +29,25 @@ const stats = [
 
 const Statistics = () => {
   return (
-    <section className="py-16 bg-secondary" dir="rtl">
+    <section className="py-16 bg-muted" dir="rtl">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
-            <div key={index} className="text-center group">
-              <div className="w-14 h-14 bg-secondary-foreground/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <stat.icon className="w-7 h-7 text-secondary-foreground" />
+            <div 
+              key={index} 
+              className="text-center group animate-on-scroll"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="w-14 h-14 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <stat.icon className="w-7 h-7 text-secondary" />
               </div>
-              <div className="text-3xl md:text-4xl font-bold text-secondary-foreground mb-1">
+              <div className="text-3xl md:text-4xl font-bold text-foreground mb-1">
                 {stat.value}
               </div>
-              <div className="text-secondary-foreground font-semibold mb-1">
+              <div className="text-foreground font-semibold mb-1">
                 {stat.label}
               </div>
-              <div className="text-secondary-foreground/70 text-sm">
+              <div className="text-muted-foreground text-sm">
                 {stat.description}
               </div>
             </div>
