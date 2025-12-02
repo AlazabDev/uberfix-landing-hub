@@ -345,27 +345,6 @@ const LiveMap = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      {/* Header */}
-      <section className="bg-gradient-to-r from-[#1e3a5f] to-[#2d4a6f] py-4">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img 
-                src="/icons/uberfix-icon.gif" 
-                alt="UberFix" 
-                className="w-12 h-12 rounded-xl"
-              />
-              <span className="text-2xl font-bold text-white">
-                <span className="text-secondary">Uber</span>Fix.shop
-              </span>
-            </div>
-            <h1 className="text-xl md:text-2xl font-bold text-white">
-              Quick Maintenance Methods
-            </h1>
-          </div>
-        </div>
-      </section>
-
       {/* Map Section */}
       <section className="relative" style={{ height: "calc(100vh - 200px)", minHeight: "600px" }}>
         <div ref={mapContainer} className="absolute inset-0" />
