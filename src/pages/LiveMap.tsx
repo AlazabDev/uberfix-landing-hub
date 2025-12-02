@@ -127,7 +127,6 @@ const LiveMap = () => {
       el.innerHTML = `
         <div class="branch-pin">
           <img src="/icons/icon-6070.png" alt="Branch" />
-          <span class="branch-label">Abu Auf</span>
         </div>
       `;
 
@@ -167,9 +166,7 @@ const LiveMap = () => {
       const el = document.createElement("div");
       el.className = "tech-marker";
       el.innerHTML = `
-        <div class="tech-circle">
-          <img src="${tech.icon}" alt="${tech.specialty}" />
-        </div>
+        <img src="${tech.icon}" alt="${tech.specialty}" class="tech-icon-img" />
       `;
 
       const statusColor = tech.status === "متاح الآن" ? "#22c55e" : tech.status === "مشغول اليوم" ? "#ef4444" : "#f59e0b";
@@ -212,42 +209,22 @@ const LiveMap = () => {
         animation: bounce 2s infinite;
       }
       .branch-pin img {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-      }
-      .branch-label {
-        background: #1e3a5f;
-        color: white;
-        font-size: 10px;
-        padding: 2px 6px;
-        border-radius: 4px;
-        margin-top: -5px;
-        font-weight: bold;
       }
       
       .tech-marker {
         cursor: pointer;
       }
-      .tech-circle {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 3px solid white;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      .tech-icon-img {
+        width: 45px;
+        height: 45px;
+        filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
         transition: transform 0.3s ease;
       }
-      .tech-circle:hover {
+      .tech-icon-img:hover {
         transform: scale(1.2);
-      }
-      .tech-circle img {
-        width: 35px;
-        height: 35px;
-        filter: brightness(0) invert(1);
       }
       
       .mapboxgl-popup-content {
