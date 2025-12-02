@@ -40,7 +40,12 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-2">
+            <img 
+              src="/icons/uberfix-icon.gif" 
+              alt="UberFix" 
+              className="w-10 h-10 rounded-lg"
+            />
             <div className="text-2xl font-bold text-white">
               <span className="text-secondary">Uber</span>Fix
             </div>

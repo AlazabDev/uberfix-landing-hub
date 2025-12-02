@@ -1,15 +1,15 @@
-import { Wrench } from "lucide-react";
-
 const Footer = () => {
   return (
     <footer className="bg-card border-t border-border py-12" dir="rtl">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-5 gap-8 mb-8">
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-primary-foreground" />
-              </div>
+            <div className="flex items-center gap-3 mb-4">
+              <img 
+                src="/icons/uberfix-icon.gif" 
+                alt="UberFix" 
+                className="w-12 h-12 rounded-xl"
+              />
               <span className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                 UberFix
               </span>
