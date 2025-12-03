@@ -23,6 +23,7 @@ const Navigation = () => {
   ];
 
   const moreLinks = [
+    { path: "/enterprise", label: "حلول الشركات" },
     { path: "/live-map", label: "خريطة الفنيين" },
     { path: "/faq", label: "الأسئلة الشائعة" },
     { path: "/technicians", label: "انضم كفني" },

@@ -21,6 +21,7 @@ import LuxuryFinishing from "./pages/LuxuryFinishing";
 import BrandIdentity from "./pages/BrandIdentity";
 import LabnElAsfor from "./pages/LabnElAsfor";
 import LiveMap from "./pages/LiveMap";
+import EnterpriseServices from "./pages/EnterpriseServices";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="/brand-identity" element={<BrandIdentity />} />
           <Route path="/labn-el-asfor" element={<LabnElAsfor />} />
           <Route path="/live-map" element={<LiveMap />} />
+          <Route path="/enterprise" element={<EnterpriseServices />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
