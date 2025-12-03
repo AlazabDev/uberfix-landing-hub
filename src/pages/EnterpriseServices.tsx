@@ -156,15 +156,15 @@ const EnterpriseServices = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-10 py-6 rounded-xl shadow-glow"
+                className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-lg px-10 py-6 rounded-xl shadow-glow"
               >
                 ابدأ الآن
                 <ArrowLeft className="mr-2 w-5 h-5" />
               </Button>
               <Button 
                 size="lg" 
-                variant="outline" 
-                className="border-white/30 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 text-lg px-10 py-6 rounded-xl"
+                variant="hero"
+                className="text-lg px-10 py-6 rounded-xl"
               >
                 تجربة لوحة التحكم
               </Button>
@@ -342,7 +342,7 @@ const EnterpriseServices = () => {
                   ))}
                 </div>
 
-                <Button size="lg" className="bg-primary hover:bg-primary/90">
+                <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground">
                   اعرف المزيد
                 </Button>
               </div>
@@ -518,7 +518,7 @@ const EnterpriseServices = () => {
               <Button 
                 type="submit"
                 size="lg" 
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg py-6 rounded-xl shadow-glow"
+                className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground text-lg py-6 rounded-xl shadow-glow"
               >
                 <Users className="ml-2 w-5 h-5" />
                 تفعيل حساب الشركة

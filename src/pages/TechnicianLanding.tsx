@@ -19,6 +19,8 @@ import {
   Play,
   ArrowLeft
 } from "lucide-react";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 const REGISTRATION_URL = "https://uberfix.shop/technicians/registration";
 
@@ -29,28 +31,13 @@ const TechnicianLanding = () => {
 
   return (
     <div className="min-h-screen bg-background" dir="rtl">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <img 
-            src="https://al-azab.co/w.png" 
-            alt="UberFix Logo" 
-            className="h-10 w-auto"
-          />
-          <Button 
-            onClick={handleRegister}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
-          >
-            سجّل كفني
-          </Button>
-        </div>
-      </header>
+      <Navigation />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900" />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/90 to-primary/80" />
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
         
         <div className="container mx-auto px-4 relative z-10 text-center">
           <div className="max-w-4xl mx-auto animate-fade-in">
@@ -59,13 +46,13 @@ const TechnicianLanding = () => {
               <span className="text-primary text-sm font-medium">انضم لأكثر من 500+ فني محترف</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground mb-6 leading-tight">
               انضم الآن إلى شبكة
-              <span className="text-primary block mt-2">الفنيين المحترفين</span>
+              <span className="text-secondary block mt-2">الفنيين المحترفين</span>
               في UberFix
             </h1>
             
-            <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-primary-foreground/80 mb-10 max-w-2xl mx-auto leading-relaxed">
               ساعد آلاف العملاء، واحصل على دخل ثابت، ومكافآت مالية، وفرص تطوير مهني مستمرة
             </p>
             
@@ -73,16 +60,16 @@ const TechnicianLanding = () => {
               <Button 
                 size="lg" 
                 onClick={handleRegister}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-10 py-6 font-bold shadow-lg shadow-primary/30 group"
+                className="bg-secondary hover:bg-secondary/90 text-secondary-foreground text-lg px-10 py-6 font-bold shadow-lg shadow-secondary/30 group"
               >
                 سجّل الآن كفني محترف
                 <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform rotate-180" />
               </Button>
               <Button 
                 size="lg" 
-                variant="outline"
+                variant="hero"
                 onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-                className="border-2 border-gray-600 text-white hover:bg-gray-800 text-lg px-10 py-6"
+                className="text-lg px-10 py-6"
               >
                 اكتشف المزايا
               </Button>
@@ -91,16 +78,16 @@ const TechnicianLanding = () => {
             {/* Quick Stats */}
             <div className="grid grid-cols-3 gap-6 mt-16 max-w-2xl mx-auto">
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary">+5000</div>
-                <div className="text-gray-400 text-sm mt-1">طلب شهري</div>
+                <div className="text-3xl md:text-4xl font-bold text-secondary">+5000</div>
+                <div className="text-primary-foreground/60 text-sm mt-1">طلب شهري</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary">70%</div>
-                <div className="text-gray-400 text-sm mt-1">عمولة للفني</div>
+                <div className="text-3xl md:text-4xl font-bold text-secondary">70%</div>
+                <div className="text-primary-foreground/60 text-sm mt-1">عمولة للفني</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary">24/7</div>
-                <div className="text-gray-400 text-sm mt-1">دعم متواصل</div>
+                <div className="text-3xl md:text-4xl font-bold text-secondary">24/7</div>
+                <div className="text-primary-foreground/60 text-sm mt-1">دعم متواصل</div>
               </div>
             </div>
           </div>
@@ -108,13 +95,13 @@ const TechnicianLanding = () => {
       </section>
 
       {/* Value Proposition Section */}
-      <section id="features" className="py-20 bg-gray-900">
+      <section id="features" className="py-20 bg-muted">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               مميزات حصرية للفنيين
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               نوفر لك كل ما تحتاجه للنجاح في مسيرتك المهنية
             </p>
           </div>
@@ -144,14 +131,14 @@ const TechnicianLanding = () => {
             ].map((feature, index) => (
               <div 
                 key={index}
-                className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 hover:border-primary/50 transition-all duration-300 group animate-slide-up"
+                className="bg-card border border-border rounded-2xl p-6 hover:border-secondary/50 transition-all duration-300 group animate-slide-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="w-14 h-14 bg-primary/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/30 transition-colors">
-                  <feature.icon className="w-7 h-7 text-primary" />
+                <div className="w-14 h-14 bg-secondary/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-secondary/30 transition-colors">
+                  <feature.icon className="w-7 h-7 text-secondary" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-                <p className="text-gray-400">{feature.description}</p>
+                <h3 className="text-xl font-bold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -160,7 +147,7 @@ const TechnicianLanding = () => {
             <Button 
               size="lg" 
               onClick={handleRegister}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8"
+              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold px-8"
             >
               إنشاء حساب فني
             </Button>
@@ -169,13 +156,13 @@ const TechnicianLanding = () => {
       </section>
 
       {/* Why UberFix Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-900 to-gray-800">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
                 لماذا UberFix هي
-                <span className="text-primary"> الأفضل</span> للفنيين؟
+                <span className="text-secondary"> الأفضل</span> للفنيين؟
               </h2>
               
               <div className="space-y-4">
@@ -186,11 +173,11 @@ const TechnicianLanding = () => {
                   { icon: Building2, text: "شراكات مع كبرى الشركات والمؤسسات في مصر" },
                   { icon: TrendingUp, text: "فرص توسع وترقي داخل المنصة" }
                 ].map((item, index) => (
-                  <div key={index} className="flex items-start gap-4 bg-gray-800/30 rounded-xl p-4">
-                    <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <item.icon className="w-5 h-5 text-primary" />
+                  <div key={index} className="flex items-start gap-4 bg-muted rounded-xl p-4">
+                    <div className="w-10 h-10 bg-secondary/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <item.icon className="w-5 h-5 text-secondary" />
                     </div>
-                    <p className="text-gray-300 text-lg">{item.text}</p>
+                    <p className="text-muted-foreground text-lg">{item.text}</p>
                   </div>
                 ))}
               </div>
@@ -198,7 +185,7 @@ const TechnicianLanding = () => {
               <Button 
                 size="lg" 
                 onClick={handleRegister}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 mt-8"
+                className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold px-8 mt-8"
               >
                 ابدأ رحلتك الآن
               </Button>
@@ -206,29 +193,29 @@ const TechnicianLanding = () => {
 
             {/* Video/Image Placeholder */}
             <div className="relative animate-scale-in">
-              <div className="aspect-video bg-gray-800 rounded-2xl border border-gray-700 overflow-hidden relative group cursor-pointer">
+              <div className="aspect-video bg-card rounded-2xl border border-border overflow-hidden relative group cursor-pointer">
                 <img 
                   src="/upload/Demo-UberFix.jpg" 
                   alt="UberFix App Demo"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
-                  <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform">
-                    <Play className="w-8 h-8 text-primary-foreground mr-[-4px]" fill="currentColor" />
+                  <div className="w-20 h-20 bg-secondary rounded-full flex items-center justify-center shadow-lg shadow-secondary/30 group-hover:scale-110 transition-transform">
+                    <Play className="w-8 h-8 text-secondary-foreground mr-[-4px]" fill="currentColor" />
                   </div>
                 </div>
               </div>
-              <p className="text-center text-gray-400 mt-4">شاهد كيف يعمل تطبيق UberFix للفنيين</p>
+              <p className="text-center text-muted-foreground mt-4">شاهد كيف يعمل تطبيق UberFix للفنيين</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Trust Section */}
-      <section className="py-16 bg-gray-800">
+      <section className="py-16 bg-card">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
               موثوق من كبرى الشركات
             </h2>
           </div>
@@ -237,10 +224,10 @@ const TechnicianLanding = () => {
             {["العزب Construction", "أبو عوف", "كارفور", "مترو"].map((company, index) => (
               <div 
                 key={index}
-                className="bg-gray-700/30 rounded-xl p-6 text-center border border-gray-700"
+                className="bg-muted rounded-xl p-6 text-center border border-border"
               >
-                <Building2 className="w-8 h-8 text-primary mx-auto mb-2" />
-                <span className="text-gray-300 font-medium">{company}</span>
+                <Building2 className="w-8 h-8 text-secondary mx-auto mb-2" />
+                <span className="text-muted-foreground font-medium">{company}</span>
               </div>
             ))}
           </div>
@@ -264,20 +251,20 @@ const TechnicianLanding = () => {
                 text: "المكافآت الشهرية والبونص بيحفزني أقدم أفضل خدمة دايمًا"
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-gray-700/30 rounded-xl p-6 border border-gray-700">
+              <div key={index} className="bg-muted rounded-xl p-6 border border-border">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-primary" fill="currentColor" />
+                    <Star key={i} className="w-4 h-4 text-secondary" fill="currentColor" />
                   ))}
                 </div>
-                <p className="text-gray-300 mb-4">"{testimonial.text}"</p>
+                <p className="text-muted-foreground mb-4">"{testimonial.text}"</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
-                    <Users className="w-5 h-5 text-primary" />
+                  <div className="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center">
+                    <Users className="w-5 h-5 text-secondary" />
                   </div>
                   <div>
-                    <div className="text-white font-medium">{testimonial.name}</div>
-                    <div className="text-gray-400 text-sm">{testimonial.role}</div>
+                    <div className="text-foreground font-medium">{testimonial.name}</div>
+                    <div className="text-muted-foreground text-sm">{testimonial.role}</div>
                   </div>
                 </div>
               </div>
@@ -287,13 +274,13 @@ const TechnicianLanding = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-gray-900">
+      <section className="py-20 bg-muted">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               الأسئلة الشائعة
             </h2>
-            <p className="text-gray-400">إجابات على أهم استفساراتك</p>
+            <p className="text-muted-foreground">إجابات على أهم استفساراتك</p>
           </div>
 
           <div className="max-w-3xl mx-auto">
@@ -320,15 +307,15 @@ const TechnicianLanding = () => {
                   answer: "تشمل الطلبات: الكهرباء، السباكة، التكييف، النجارة، الدهانات، التنظيف، والعديد من الخدمات الأخرى."
                 }
               ].map((faq, index) => (
-                <AccordionItem 
+                <AccordionItem
                   key={index} 
                   value={`item-${index}`}
-                  className="bg-gray-800/50 border border-gray-700 rounded-xl px-6 overflow-hidden"
+                  className="bg-card border border-border rounded-xl px-6 overflow-hidden"
                 >
-                  <AccordionTrigger className="text-white hover:text-primary text-right py-5">
+                  <AccordionTrigger className="text-foreground hover:text-secondary text-right py-5">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-gray-400 pb-5">
+                  <AccordionContent className="text-muted-foreground pb-5">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -340,7 +327,7 @@ const TechnicianLanding = () => {
             <Button 
               size="lg" 
               onClick={handleRegister}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-10"
+              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold px-10"
             >
               سجّل كفني الآن
             </Button>
@@ -349,54 +336,27 @@ const TechnicianLanding = () => {
       </section>
 
       {/* Footer CTA */}
-      <footer className="bg-gray-950 border-t border-gray-800">
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+      <section className="bg-card border-t border-border py-12">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
               جاهز لبدء رحلتك المهنية؟
             </h2>
-            <p className="text-gray-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               انضم الآن وكن جزءًا من أكبر شبكة فنيين في مصر
             </p>
             <Button 
               size="lg" 
               onClick={handleRegister}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-10 py-6 text-lg"
+              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold px-10 py-6 text-lg"
             >
               إنشاء حساب فني مجانًا
             </Button>
           </div>
-
-          <div className="border-t border-gray-800 pt-8 mt-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <img 
-                src="https://al-azab.co/w.png" 
-                alt="UberFix Logo" 
-                className="h-8 w-auto"
-              />
-              
-              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
-                <a href="https://uberfix.shop/terms" className="hover:text-primary transition-colors">
-                  الشروط والأحكام
-                </a>
-                <a href="https://uberfix.shop/privacy" className="hover:text-primary transition-colors">
-                  سياسة الخصوصية
-                </a>
-                <a href="https://uberfix.shop/support" className="hover:text-primary transition-colors">
-                  الدعم
-                </a>
-                <a href="https://uberfix.shop/careers" className="hover:text-primary transition-colors">
-                  الوظائف
-                </a>
-              </div>
-
-              <div className="text-gray-500 text-sm">
-                © {new Date().getFullYear()} UberFix - العزب Construction
-              </div>
-            </div>
-          </div>
         </div>
-      </footer>
+      </section>
+
+      <Footer />
     </div>
   );
 };
