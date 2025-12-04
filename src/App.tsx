@@ -22,6 +22,7 @@ import BrandIdentity from "./pages/BrandIdentity";
 import LabnElAsfor from "./pages/LabnElAsfor";
 import LiveMap from "./pages/LiveMap";
 import EnterpriseServices from "./pages/EnterpriseServices";
+import MaterialsPricing from "./pages/MaterialsPricing";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/labn-el-asfor" element={<LabnElAsfor />} />
           <Route path="/live-map" element={<LiveMap />} />
           <Route path="/enterprise" element={<EnterpriseServices />} />
+          <Route path="/pricing" element={<MaterialsPricing />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
