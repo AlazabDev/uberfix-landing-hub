@@ -90,17 +90,23 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary" dir="rtl">
-      {/* Simple Grid Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(hsl(0 0% 100%) 1px, transparent 1px), linear-gradient(90deg, hsl(0 0% 100%) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
-        }} />
+      {/* Video Background */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover opacity-30"
+        >
+          <source src="https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-primary/70" />
       </div>
 
       {/* Decorative Shapes */}
-      <div className="absolute top-20 left-[10%] w-64 h-64 bg-secondary/20 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-[10%] w-80 h-80 bg-secondary/15 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-[10%] w-64 h-64 bg-secondary/20 rounded-full blur-3xl z-[1]" />
+      <div className="absolute bottom-20 right-[10%] w-80 h-80 bg-secondary/15 rounded-full blur-3xl z-[1]" />
 
       {/* Floating Icons */}
       <motion.div 
