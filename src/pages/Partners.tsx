@@ -1,4 +1,5 @@
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Building2, Handshake, Award, Users } from "lucide-react";
 
@@ -175,12 +176,7 @@ const Partners = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-card border-t border-border py-8">
-        <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>© 2024 UberFix - جميع الحقوق محفوظة</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

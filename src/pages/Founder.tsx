@@ -1,5 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import Navigation from "@/components/Navigation"
+import Footer from "@/components/Footer"
 
 export default function FounderPage() {
 
@@ -95,8 +97,9 @@ export default function FounderPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#f4f4f4] py-16 px-4" dir="rtl">
-      <div className="max-w-5xl mx-auto space-y-20">
+    <div className="min-h-screen bg-background" dir="rtl">
+      <Navigation />
+      <div className="max-w-5xl mx-auto space-y-20 py-16 px-4">
 
         {/* ================= HEADER ================= */}
         <div className="text-center mb-6">
@@ -303,12 +306,8 @@ export default function FounderPage() {
           ))}
         </div>
 
-        {/* ================= FOOTER ================= */}
-        <div className="text-center text-gray-500 text-sm mt-16">
-          © 2025 Al-Azab Construction Company — جميع الحقوق محفوظة.
-        </div>
-
       </div>
+      <Footer />
     </div>
   )
 }
