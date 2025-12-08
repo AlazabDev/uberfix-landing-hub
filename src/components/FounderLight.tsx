@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useNavigate } from "react-router-dom";
 
 export default function FounderLight() {
+  const navigate = useNavigate();
   const { ref: imageRef, isVisible: imageVisible } = useScrollAnimation({ threshold: 0.2 });
   const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation({ threshold: 0.2 });
 
@@ -56,8 +58,8 @@ export default function FounderLight() {
 
           {/* زر الانتقال */}
           <Button
-            className="mt-8 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-semibold rounded-full px-10 py-6 text-lg shadow-lg hover:scale-105 transition-all duration-300 glow-effect"
-            onClick={() => (window.location.href = "/founder")}
+            className="mt-8 bg-secondary text-primary hover:bg-secondary/90 font-semibold rounded-full px-10 py-6 text-lg shadow-lg hover:scale-105 transition-all duration-300"
+            onClick={() => navigate("/founder")}
           >
             اكتشف قصة المؤسس
           </Button>
