@@ -89,47 +89,18 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden" dir="rtl">
-      {/* Dynamic Gradient Background */}
-      <div 
-        className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5 transition-all duration-1000"
-        style={{
-          background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, hsl(var(--primary) / 0.08) 0%, hsl(var(--background)) 50%)`
-        }}
-      />
-      
-      {/* Animated Grid Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary" dir="rtl">
+      {/* Simple Grid Pattern */}
+      <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(hsl(0 0% 100%) 1px, transparent 1px), linear-gradient(90deg, hsl(0 0% 100%) 1px, transparent 1px)`,
           backgroundSize: '60px 60px'
         }} />
       </div>
 
-      {/* Floating Orbs */}
-      <motion.div 
-        className="absolute top-20 left-[10%] w-96 h-96 bg-gradient-to-br from-primary/20 to-secondary/10 rounded-full blur-3xl"
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div 
-        className="absolute bottom-20 right-[10%] w-[500px] h-[500px] bg-gradient-to-br from-secondary/15 to-accent/10 rounded-full blur-3xl"
-        animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-      />
-      <motion.div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-primary/5 to-transparent rounded-full"
-        animate={{
-          rotate: 360,
-        }}
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-      />
+      {/* Decorative Shapes */}
+      <div className="absolute top-20 left-[10%] w-64 h-64 bg-secondary/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 right-[10%] w-80 h-80 bg-secondary/15 rounded-full blur-3xl" />
 
       {/* Floating Icons */}
       <motion.div 
@@ -137,8 +108,8 @@ const Hero = () => {
         animate="animate"
         className="absolute top-32 right-[15%] hidden lg:block"
       >
-        <div className="w-16 h-16 bg-card/80 backdrop-blur-md rounded-2xl shadow-elevated flex items-center justify-center border border-border/50">
-          <Shield className="w-8 h-8 text-primary" />
+        <div className="w-16 h-16 bg-primary-foreground/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-primary-foreground/20">
+          <Shield className="w-8 h-8 text-primary-foreground" />
         </div>
       </motion.div>
       <motion.div 
@@ -147,8 +118,8 @@ const Hero = () => {
         className="absolute bottom-40 left-[12%] hidden lg:block"
         style={{ animationDelay: "1s" }}
       >
-        <div className="w-14 h-14 bg-card/80 backdrop-blur-md rounded-2xl shadow-elevated flex items-center justify-center border border-border/50">
-          <Clock className="w-7 h-7 text-secondary" />
+        <div className="w-14 h-14 bg-secondary/90 rounded-2xl flex items-center justify-center">
+          <Clock className="w-7 h-7 text-primary" />
         </div>
       </motion.div>
       <motion.div 
@@ -157,8 +128,8 @@ const Hero = () => {
         className="absolute top-48 left-[20%] hidden lg:block"
         style={{ animationDelay: "2s" }}
       >
-        <div className="w-12 h-12 bg-card/80 backdrop-blur-md rounded-xl shadow-elevated flex items-center justify-center border border-border/50">
-          <Sparkles className="w-6 h-6 text-accent" />
+        <div className="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center">
+          <Sparkles className="w-6 h-6 text-primary" />
         </div>
       </motion.div>
 
@@ -171,9 +142,9 @@ const Hero = () => {
         >
           {/* Badge */}
           <motion.div variants={itemVariants}>
-            <span className="inline-flex items-center gap-2 bg-primary/10 text-primary px-5 py-2.5 rounded-full mb-8 border border-primary/20 backdrop-blur-sm">
-              <Sparkles className="w-4 h-4 animate-pulse" />
-              <span className="text-sm font-semibold tracking-wide">إدارة صيانة العلامات التجارية وسلاسل الإمداد</span>
+            <span className="inline-flex items-center gap-2 bg-secondary text-primary px-5 py-2.5 rounded-full mb-8 font-bold">
+              <Sparkles className="w-4 h-4" />
+              <span className="text-sm tracking-wide">إدارة صيانة العلامات التجارية وسلاسل الإمداد</span>
             </span>
           </motion.div>
           
@@ -181,18 +152,18 @@ const Hero = () => {
           <motion.div variants={itemVariants} className="mb-8">
             <h1 className="text-6xl md:text-8xl font-black leading-[1.1] tracking-tight">
               <span className="relative inline-block">
-                <span className="bg-gradient-to-l from-primary via-primary to-secondary bg-clip-text text-transparent">
+                <span className="text-secondary">
                   UberFix
                 </span>
                 <motion.span 
-                  className="absolute -bottom-2 left-0 right-0 h-1.5 bg-gradient-to-l from-primary to-secondary rounded-full"
+                  className="absolute -bottom-2 left-0 right-0 h-1.5 bg-secondary rounded-full"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
                 />
               </span>
               <br />
-              <span className="text-foreground text-5xl md:text-6xl font-bold mt-4 block">
+              <span className="text-primary-foreground text-5xl md:text-6xl font-bold mt-4 block">
                 حلول صيانة وتشغيل ذكية
               </span>
             </h1>
@@ -201,11 +172,11 @@ const Hero = () => {
           {/* Subtitle */}
           <motion.p 
             variants={itemVariants}
-            className="text-xl md:text-2xl text-muted-foreground mb-10 leading-relaxed max-w-3xl mx-auto"
+            className="text-xl md:text-2xl text-primary-foreground/80 mb-10 leading-relaxed max-w-3xl mx-auto"
           >
             نظام متكامل لإدارة صيانة فروع العلامات التجارية الكبرى في مصر
             <br />
-            <span className="text-primary font-bold text-lg md:text-xl inline-flex items-center gap-2 mt-2">
+            <span className="text-secondary font-bold text-lg md:text-xl inline-flex items-center gap-2 mt-2">
               <Building2 className="w-5 h-5" />
               من شركة العزب المعمارية - الريادة في إدارة الصيانة الاحترافية
             </span>
@@ -218,7 +189,7 @@ const Hero = () => {
           >
             <Button 
               size="lg" 
-              className="bg-gradient-to-l from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground shadow-xl shadow-primary/25 group px-8 py-6 text-lg font-bold rounded-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-primary/30 hover:-translate-y-1"
+              className="bg-secondary hover:bg-secondary/90 text-primary shadow-xl group px-8 py-6 text-lg font-bold rounded-2xl transition-all duration-300 hover:-translate-y-1"
               onClick={() => window.open('https://uberfix.shop', '_blank')}
             >
               ابدأ الآن مجاناً
@@ -227,7 +198,7 @@ const Hero = () => {
             <Button 
               size="lg" 
               variant="outline"
-              className="border-2 border-border hover:border-primary/50 hover:bg-primary/5 px-8 py-6 text-lg font-semibold rounded-2xl transition-all duration-300 hover:-translate-y-1"
+              className="border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 px-8 py-6 text-lg font-semibold rounded-2xl transition-all duration-300 hover:-translate-y-1"
               onClick={() => window.open('https://uberfix.shop/about', '_blank')}
             >
               <MapPin className="ml-2 h-5 w-5" />
@@ -238,18 +209,18 @@ const Hero = () => {
           {/* Trust Indicators */}
           <motion.div 
             variants={itemVariants}
-            className="flex flex-wrap justify-center items-center gap-6 mb-16 text-muted-foreground"
+            className="flex flex-wrap justify-center items-center gap-6 mb-16 text-primary-foreground/70"
           >
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
               <span className="text-sm">خدمة على مدار الساعة</span>
             </div>
-            <div className="w-px h-4 bg-border hidden sm:block" />
+            <div className="w-px h-4 bg-primary-foreground/20 hidden sm:block" />
             <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-primary" />
+              <Shield className="w-4 h-4 text-secondary" />
               <span className="text-sm">ضمان جودة الخدمة</span>
             </div>
-            <div className="w-px h-4 bg-border hidden sm:block" />
+            <div className="w-px h-4 bg-primary-foreground/20 hidden sm:block" />
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-secondary" />
               <span className="text-sm">فنيين معتمدين</span>
@@ -296,8 +267,6 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Bottom Gradient Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
     </section>
   );
 };
@@ -313,18 +282,8 @@ interface StatCardProps {
 }
 
 const StatCard = ({ icon, value, label, color, prefix = '', suffix = '', delay = 0 }: StatCardProps) => {
-  const colorClasses = {
-    primary: 'text-primary border-primary/30 hover:border-primary/60',
-    secondary: 'text-secondary border-secondary/30 hover:border-secondary/60',
-    accent: 'text-accent border-accent/30 hover:border-accent/60',
-  };
-
-  const glowClasses = {
-    primary: 'group-hover:shadow-primary/20',
-    secondary: 'group-hover:shadow-secondary/20',
-    accent: 'group-hover:shadow-accent/20',
-  };
-
+  const isSecondary = color === 'secondary' || color === 'accent';
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -332,14 +291,18 @@ const StatCard = ({ icon, value, label, color, prefix = '', suffix = '', delay =
       transition={{ delay: 0.8 + delay, duration: 0.5 }}
       className="group"
     >
-      <div className={`relative bg-card/60 backdrop-blur-md rounded-2xl p-6 border-2 ${colorClasses[color]} transition-all duration-500 hover:-translate-y-2 hover:shadow-xl ${glowClasses[color]}`}>
-        <div className={`${colorClasses[color].split(' ')[0]} mb-3 mx-auto w-fit`}>
+      <div className={`relative rounded-2xl p-6 border-2 transition-all duration-500 hover:-translate-y-2 ${
+        isSecondary 
+          ? 'bg-secondary text-primary border-secondary' 
+          : 'bg-primary-foreground/10 text-primary-foreground border-primary-foreground/20 hover:border-primary-foreground/40'
+      }`}>
+        <div className="mb-3 mx-auto w-fit">
           {icon}
         </div>
-        <div className={`text-3xl md:text-4xl font-black ${colorClasses[color].split(' ')[0]} mb-1 tabular-nums`}>
+        <div className="text-3xl md:text-4xl font-black mb-1 tabular-nums">
           {prefix}{value.toLocaleString()}{suffix}
         </div>
-        <div className="text-sm text-muted-foreground font-medium">{label}</div>
+        <div className={`text-sm font-medium ${isSecondary ? 'text-primary/70' : 'text-primary-foreground/70'}`}>{label}</div>
       </div>
     </motion.div>
   );
