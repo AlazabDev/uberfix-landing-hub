@@ -130,6 +130,17 @@ All colors MUST be HSL.
     text-size-adjust: 100%;
   }
 
+  /* RTL/LTR Direction Support */
+  html[dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+  }
+
+  html[dir="ltr"] {
+    direction: ltr;
+    text-align: left;
+  }
+
   body {
     @apply bg-background text-foreground;
     -webkit-font-smoothing: antialiased;
@@ -156,6 +167,23 @@ All colors MUST be HSL.
     padding-right: env(safe-area-inset-right);
   }
 
+  /* RTL-aware safe areas */
+  html[dir="rtl"] .safe-area-start {
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  html[dir="rtl"] .safe-area-end {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  html[dir="ltr"] .safe-area-start {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  html[dir="ltr"] .safe-area-end {
+    padding-right: env(safe-area-inset-right);
+  }
+
   /* Touch-friendly tap targets */
   button,
   a,
@@ -175,6 +203,20 @@ All colors MUST be HSL.
   #root {
     overflow-x: hidden;
     width: 100%;
+  }
+
+  /* Logical properties for RTL/LTR support */
+  .text-start {
+    text-align: start;
+  }
+
+  .text-end {
+    text-align: end;
+  }
+
+  /* Flip icons in RTL mode */
+  html[dir="rtl"] .rtl-flip {
+    transform: scaleX(-1);
   }
 }
 

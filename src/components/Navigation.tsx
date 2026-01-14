@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
 import {
@@ -8,39 +9,41 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { t } = useTranslation();
 
   const mainLinks = [
-    { path: "/", label: "الرئيسية" },
-    { path: "/services", label: "الخدمات" },
-    { path: "/projects", label: "المشروعات" },
-    { path: "/branches", label: "الفروع" },
-    { path: "/about", label: "عن الشركة" },
-    { path: "/contact", label: "اتصل بنا" },
+    { path: "/", label: t("nav.home") },
+    { path: "/services", label: t("nav.services") },
+    { path: "/projects", label: t("nav.projects") },
+    { path: "/branches", label: t("nav.branches") },
+    { path: "/about", label: t("nav.about") },
+    { path: "/contact", label: t("nav.contact") },
   ];
 
   const moreLinks = [
-    { path: "/founder", label: "المؤسس" },
-    { path: "/pricing", label: "أسعار الخامات" },
-    { path: "/enterprise", label: "حلول الشركات" },
-    { path: "/live-map", label: "خريطة الفنيين" },
-    { path: "/faq", label: "الأسئلة الشائعة" },
-    { path: "/technicians", label: "انضم كفني" },
-    { path: "/partners", label: "الشركاء والعملاء" },
-    { path: "/help", label: "مركز المساعدة" },
-    { path: "/quality-standards", label: "معايير الجودة" },
-    { path: "/luxury-finishing", label: "Luxury Finishing" },
-    { path: "/brand-identity", label: "Brand Identity" },
-    { path: "/labn-el-asfor", label: "لبن العصفور" },
+    { path: "/founder", label: t("nav.founder") },
+    { path: "/pricing", label: t("nav.pricing") },
+    { path: "/enterprise", label: t("nav.enterprise") },
+    { path: "/live-map", label: t("nav.liveMap") },
+    { path: "/faq", label: t("nav.faq") },
+    { path: "/technicians", label: t("nav.technicians") },
+    { path: "/partners", label: t("nav.partners") },
+    { path: "/help", label: t("nav.help") },
+    { path: "/quality-standards", label: t("nav.quality") },
+    { path: "/luxury-finishing", label: t("nav.luxury") },
+    { path: "/brand-identity", label: t("nav.brand") },
+    { path: "/labn-el-asfor", label: t("nav.labn") },
   ];
 
   const allLinks = [...mainLinks, ...moreLinks];
 
   return (
-    <nav className="bg-primary text-primary-foreground sticky top-0 z-50 shadow-lg" dir="rtl">
+    <nav className="bg-primary text-primary-foreground sticky top-0 z-50 shadow-lg">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -75,7 +78,7 @@ const Navigation = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-1 text-sm font-medium text-white/90 hover:text-secondary transition-colors">
-                  المزيد
+                  {t("nav.more")}
                   <ChevronDown className="w-4 h-4" />
                 </button>
               </DropdownMenuTrigger>
@@ -100,24 +103,29 @@ const Navigation = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
+            <LanguageSwitcher />
+
             <Button
               size="sm"
               className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
               asChild
             >
               <a href="https://uberfix.shop" target="_blank" rel="noopener noreferrer">
-                ابدأ الآن
+                {t("nav.startNow")}
               </a>
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden text-white"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <LanguageSwitcher />
+            <button
+              className="text-white"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -143,7 +151,7 @@ const Navigation = () => {
               asChild
             >
               <a href="https://uberfix.shop" target="_blank" rel="noopener noreferrer">
-                ابدأ الآن
+                {t("nav.startNow")}
               </a>
             </Button>
           </div>
