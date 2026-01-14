@@ -53,7 +53,9 @@ export default defineConfig(({ mode }) => ({
         categories: ["utilities", "productivity", "business"]
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,jpg,jpeg,gif,svg,woff,woff2}"],
+        globPatterns: ["**/*.{js,css,html,ico,png,jpg,jpeg,svg,woff,woff2}"],
+        globIgnores: ["**/upload/*.gif", "**/upload/uber-hero.gif"],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -80,6 +82,17 @@ export default defineConfig(({ mode }) => ({
               },
               cacheableResponse: {
                 statuses: [0, 200]
+              }
+            }
+          },
+          {
+            urlPattern: /\/upload\/.*\.(gif|mp4|webm)$/i,
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "large-media-cache",
+              expiration: {
+                maxEntries: 5,
+                maxAgeSeconds: 60 * 60 * 24 * 7
               }
             }
           }
