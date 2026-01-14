@@ -24,6 +24,7 @@ import LiveMap from "./pages/LiveMap";
 import EnterpriseServices from "./pages/EnterpriseServices";
 import MaterialsPricing from "./pages/MaterialsPricing";
 import Founder from "./pages/Founder";
+import Install from "./pages/Install";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ const App = () => (
           <Route path="/enterprise" element={<EnterpriseServices />} />
           <Route path="/pricing" element={<MaterialsPricing />} />
           <Route path="/founder" element={<Founder />} />
+          <Route path="/install" element={<Install />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
