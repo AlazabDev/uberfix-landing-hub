@@ -1,0 +1,133 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "projects": "Projects",
+    "branches": "Branches",
+    "about": "About Us",
+    "contact": "Contact",
+    "more": "More",
+    "founder": "Founder",
+    "pricing": "Materials Pricing",
+    "enterprise": "Enterprise Solutions",
+    "liveMap": "Technicians Map",
+    "faq": "FAQ",
+    "technicians": "Join as Technician",
+    "partners": "Partners & Clients",
+    "help": "Help Center",
+    "quality": "Quality Standards",
+    "luxury": "Luxury Finishing",
+    "brand": "Brand Identity",
+    "labn": "Labn El Asfor",
+    "startNow": "Start Now"
+  },
+  "footer": {
+    "description": "A comprehensive platform for managing maintenance requests from Al-Azab Construction Company. We connect customers with professional technicians to provide the best maintenance services in Egypt.",
+    "quickLinks": "Quick Links",
+    "ourServices": "Our Services",
+    "legal": "Legal",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "termsShort": "Terms",
+    "privacyShort": "Privacy",
+    "copyright": "© 2025 All Rights Reserved"
+  },
+  "hero": {
+    "title": "Maintenance Management System",
+    "subtitle": "A comprehensive platform for managing maintenance requests",
+    "cta": "Start Now",
+    "learnMore": "Learn More"
+  },
+  "features": {
+    "title": "Why UberFix?",
+    "subtitle": "We provide integrated solutions for maintenance management with the highest quality standards",
+    "certifiedTeam": "Certified Team",
+    "certifiedTeamDesc": "Trained and certified technicians with extensive experience",
+    "qualityAssurance": "Quality Assurance",
+    "qualityAssuranceDesc": "We commit to the highest quality standards in every service",
+    "fastResponse": "Fast Response",
+    "fastResponseDesc": "Team available 24/7 to respond to your requests",
+    "competitivePricing": "Competitive Pricing",
+    "competitivePricingDesc": "Best prices while maintaining service quality"
+  },
+  "statistics": {
+    "technicians": "Professional Technicians",
+    "requests": "Maintenance Requests",
+    "clients": "Satisfied Clients",
+    "branches": "Branches"
+  },
+  "cta": {
+    "title": "Start Your Journey With Us Today",
+    "subtitle": "Join thousands of customers who trust our services",
+    "startFree": "Start Free",
+    "bookDemo": "Book a Demo",
+    "phone": "Phone",
+    "email": "Email",
+    "location": "Location"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Al-Azab Construction Company - Leaders in Integrated Maintenance",
+    "aboutUs": "Who We Are",
+    "aboutUsDesc": "Al-Azab Construction Company is a leading Egyptian company in maintenance and operations",
+    "ourVision": "Our Vision",
+    "ourVisionDesc": "To be the first choice for maintenance services in Egypt and the Middle East",
+    "certified": "Certified Company",
+    "integrated": "Integrated Services",
+    "professional": "High Professionalism"
+  },
+  "howItWorks": {
+    "title": "How Does UberFix Work?",
+    "subtitle": "Simple steps to get maintenance service",
+    "step1Title": "Submit Your Request",
+    "step1Desc": "Submit your maintenance request via the app or website",
+    "step2Title": "Technician Selection",
+    "step2Desc": "We select the most suitable technician closest to you",
+    "step3Title": "Track the Technician",
+    "step3Desc": "Follow the technician's arrival in real-time",
+    "step4Title": "Rate the Service",
+    "step4Desc": "Rate the service and share your feedback"
+  },
+  "testimonials": {
+    "title": "Customer Reviews",
+    "subtitle": "What our customers say about our services"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "We offer a wide range of specialized maintenance services",
+    "electrical": "Electrical",
+    "plumbing": "Plumbing",
+    "ac": "AC & Cooling",
+    "painting": "Painting",
+    "carpentry": "Carpentry",
+    "cleaning": "Cleaning"
+  },
+  "founder": {
+    "title": "The Founder",
+    "subtitle": "A journey of success from the beginning",
+    "readMore": "Read More"
+  },
+  "common": {
+    "learnMore": "Learn More",
+    "contactUs": "Contact Us",
+    "viewAll": "View All",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success"
+  },
+  "install": {
+    "title": "Install the App",
+    "subtitle": "Install UberFix on your device for quick access",
+    "iosTitle": "For iPhone & iPad",
+    "androidTitle": "For Android Devices",
+    "installButton": "Install App",
+    "step1": "Tap the Share button",
+    "step2": "Choose 'Add to Home Screen'",
+    "step3": "Tap 'Add' to confirm"
+  }
+}
