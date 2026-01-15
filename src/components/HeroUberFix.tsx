@@ -33,7 +33,7 @@ const HeroUberFix: React.FC = () => {
       alignItems: 'center',
     },
     titleContainer: {
-      textAlign: (isRTL ? 'right' : 'left') as const,
+      textAlign: isRTL ? 'right' as const : 'left' as const,
     },
     featuresContainer: {
       display: 'flex',
