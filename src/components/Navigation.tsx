@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown, Building2, Users, Wrench, Info, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronDown, Building2, Users, Wrench, Info, ChevronRight, ChevronLeft } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +20,8 @@ const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
 
   const mainLinks = [
     { path: "/", label: t("nav.home") },
@@ -76,7 +77,7 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="bg-primary text-primary-foreground sticky top-0 z-50 shadow-lg">
+    <nav className="bg-primary text-primary-foreground sticky top-0 z-50 shadow-lg" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -116,9 +117,9 @@ const Navigation = () => {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent 
-                align="end" 
-                className="bg-card border-border min-w-[220px] z-[100] p-2"
-              >
+                align={isRTL ? "start" : "end"}
+                side="bottom"
+                className="bg-card border-border min-w-[220px] z-[100] p-2">
                 {Object.entries(menuCategories).map(([key, category], index) => (
                   <div key={key}>
                     {index > 0 && <DropdownMenuSeparator className="my-1.5" />}
@@ -127,7 +128,10 @@ const Navigation = () => {
                         <category.icon className="w-4 h-4 text-secondary" />
                         <span>{category.label}</span>
                       </DropdownMenuSubTrigger>
-                      <DropdownMenuSubContent className="bg-card border-border min-w-[180px] p-1.5">
+                      <DropdownMenuSubContent 
+                        className={`bg-card border-border min-w-[180px] p-1.5 ${isRTL ? '[&[data-side=right]]:translate-x-0' : ''}`}
+                        sideOffset={isRTL ? -4 : 4}
+                      >
                         {category.links.map((link) => (
                           <DropdownMenuItem key={link.path} asChild>
                             <Link
@@ -204,7 +208,11 @@ const Navigation = () => {
                     <category.icon className="w-4 h-4 text-secondary" />
                     {category.label}
                   </span>
-                  <ChevronRight className={`w-4 h-4 transition-transform ${mobileSubmenu === key ? 'rotate-90' : ''}`} />
+                  {isRTL ? (
+                    <ChevronLeft className={`w-4 h-4 transition-transform ${mobileSubmenu === key ? '-rotate-90' : ''}`} />
+                  ) : (
+                    <ChevronRight className={`w-4 h-4 transition-transform ${mobileSubmenu === key ? 'rotate-90' : ''}`} />
+                  )}
                 </button>
                 {mobileSubmenu === key && (
                   <div className="ps-6 border-s-2 border-secondary/30 ms-2">
