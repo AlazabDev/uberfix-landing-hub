@@ -2,39 +2,22 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Home, Building2, Factory, Paintbrush } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-
-const services = [
-  {
-    icon: Home,
-    title: "صيانة المنازل",
-    description: "صيانة شاملة لجميع احتياجات منزلك من كهرباء وسباكة ونجارة وتكييف",
-    items: ["كهرباء", "سباكة", "نجارة", "تكييف"],
-  },
-  {
-    icon: Building2,
-    title: "صيانة المباني",
-    description: "خدمات متخصصة للمباني السكنية والإدارية مع فريق محترف",
-    items: ["مصاعد", "أنظمة الأمان", "الديكورات", "الواجهات"],
-  },
-  {
-    icon: Factory,
-    title: "صيانة المنشآت",
-    description: "حلول صيانة متكاملة للمنشآت الصناعية والتجارية الكبرى",
-    items: ["معدات", "أنظمة متقدمة", "صيانة دورية", "طوارئ"],
-  },
-  {
-    icon: Paintbrush,
-    title: "التشطيبات والديكور",
-    description: "تصميم وتنفيذ الديكورات الداخلية والخارجية بأعلى جودة",
-    items: ["تصميم", "تنفيذ", "دهانات", "أرضيات"],
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const Services = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.2 });
 
+  const services = [
+    { icon: Home, titleKey: "services.service1Title", descKey: "services.service1Desc", itemsKey: "services.service1Items" },
+    { icon: Building2, titleKey: "services.service2Title", descKey: "services.service2Desc", itemsKey: "services.service2Items" },
+    { icon: Factory, titleKey: "services.service3Title", descKey: "services.service3Desc", itemsKey: "services.service3Items" },
+    { icon: Paintbrush, titleKey: "services.service4Title", descKey: "services.service4Desc", itemsKey: "services.service4Items" },
+  ];
+
   return (
-    <section className="py-20 bg-background" dir="rtl">
+    <section className="py-20 bg-background" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4">
         <div 
           ref={headerRef}
@@ -46,16 +29,16 @@ const Services = () => {
           }}
         >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            خدماتنا <span className="text-secondary">المتنوعة</span>
+            {t("services.title")} <span className="text-secondary">{t("services.titleHighlight")}</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            نغطي جميع احتياجاتك من الصيانة والتشغيل بأعلى معايير الجودة
+            {t("services.subtitle")}
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
           {services.map((service, index) => (
-            <ServiceCard key={index} service={service} index={index} />
+            <ServiceCard key={index} service={service} index={index} t={t} />
           ))}
         </div>
       </div>
@@ -63,8 +46,9 @@ const Services = () => {
   );
 };
 
-const ServiceCard = ({ service, index }: { service: typeof services[0]; index: number }) => {
+const ServiceCard = ({ service, index, t }: { service: any; index: number; t: any }) => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
+  const items = t(service.itemsKey).split(',');
 
   return (
     <Card 
@@ -83,22 +67,20 @@ const ServiceCard = ({ service, index }: { service: typeof services[0]; index: n
           </div>
           <div className="flex-1">
             <h3 className="text-2xl font-bold text-foreground mb-2 group-hover:text-secondary transition-colors duration-300">
-              {service.title}
+              {t(service.titleKey)}
             </h3>
             <p className="text-muted-foreground">
-              {service.description}
+              {t(service.descKey)}
             </p>
           </div>
         </div>
         
         <div className="flex flex-wrap gap-2 mb-6">
-          {service.items.map((item, idx) => (
+          {items.map((item: string, idx: number) => (
             <span 
               key={idx}
               className="px-3 py-1 bg-muted rounded-full text-sm text-muted-foreground group-hover:bg-secondary/20 group-hover:text-foreground transition-all duration-300"
-              style={{
-                transitionDelay: `${idx * 50}ms`
-              }}
+              style={{ transitionDelay: `${idx * 50}ms` }}
             >
               {item}
             </span>
@@ -109,7 +91,7 @@ const ServiceCard = ({ service, index }: { service: typeof services[0]; index: n
           variant="outline" 
           className="mt-auto w-full border-2 group-hover:bg-secondary group-hover:text-secondary-foreground group-hover:border-secondary transition-all duration-300"
         >
-          اطلب الخدمة
+          {t("services.requestService")}
         </Button>
       </div>
     </Card>

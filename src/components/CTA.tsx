@@ -1,13 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useTranslation } from "react-i18next";
 
 const CTA = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const { ref: mainRef, isVisible: mainVisible } = useScrollAnimation({ threshold: 0.2 });
   const { ref: contactRef, isVisible: contactVisible } = useScrollAnimation({ threshold: 0.3 });
 
+  const contacts = [
+    { icon: Phone, titleKey: "cta.phone", valueKey: "cta.phoneValue" },
+    { icon: Mail, titleKey: "cta.email", valueKey: "cta.emailValue" },
+    { icon: MapPin, titleKey: "cta.location", valueKey: "cta.locationValue" }
+  ];
+
   return (
-    <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden" dir="rtl">
+    <section className="py-20 bg-primary text-primary-foreground relative overflow-hidden" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="absolute inset-0 bg-grid-pattern opacity-5" />
       
       <div className="container mx-auto px-4 relative z-10">
@@ -21,10 +30,10 @@ const CTA = () => {
           }}
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            جاهز لتجربة إدارة صيانة احترافية؟
+            {t("cta.title")}
           </h2>
           <p className="text-xl mb-10 opacity-90">
-            انضم إلى آلاف العملاء الذين يثقون في UberFix لإدارة جميع احتياجات الصيانة
+            {t("cta.subtitle")}
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
@@ -33,7 +42,7 @@ const CTA = () => {
               className="bg-background text-primary hover:bg-background/90 shadow-elevated px-8 hover:scale-105 transition-all duration-300"
               onClick={() => window.open('https://uberfix.shop', '_blank')}
             >
-              ابدأ مجاناً
+              {t("cta.startFree")}
             </Button>
             <Button 
               size="lg" 
@@ -41,16 +50,12 @@ const CTA = () => {
               className="border-2 border-secondary bg-secondary text-secondary-foreground hover:bg-secondary/90 px-8 hover:scale-105 transition-all duration-300 glow-effect"
               onClick={() => window.open('https://uberfix.shop/demo', '_blank')}
             >
-              احجز عرض توضيحي
+              {t("cta.bookDemo")}
             </Button>
           </div>
 
           <div ref={contactRef} className="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-            {[
-              { icon: Phone, title: "اتصل بنا", value: "+20 XXX XXX XXXX" },
-              { icon: Mail, title: "راسلنا", value: "info@uberfix.com" },
-              { icon: MapPin, title: "موقعنا", value: "القاهرة، مصر" }
-            ].map((contact, index) => (
+            {contacts.map((contact, index) => (
               <div 
                 key={index}
                 className="flex flex-col items-center gap-3 group cursor-pointer"
@@ -64,8 +69,8 @@ const CTA = () => {
                   <contact.icon className="w-6 h-6 group-hover:text-secondary transition-colors duration-300" />
                 </div>
                 <div>
-                  <div className="font-semibold mb-1">{contact.title}</div>
-                  <div className="text-sm opacity-90">{contact.value}</div>
+                  <div className="font-semibold mb-1">{t(contact.titleKey)}</div>
+                  <div className="text-sm opacity-90">{t(contact.valueKey)}</div>
                 </div>
               </div>
             ))}

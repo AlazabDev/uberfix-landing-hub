@@ -1,17 +1,21 @@
 import { Card } from "@/components/ui/card";
 import { Building, Target, Award, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const About = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
+
   return (
-    <section className="py-20 bg-gradient-hero" dir="rtl">
+    <section className="py-20 bg-gradient-hero" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              عن <span className="text-primary">شركة العزب المعمارية</span>
+              {t("about.title")} <span className="text-primary">{t("about.titleHighlight")}</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              منصة UberFix هي جزء من منظومة متكاملة لخدمات شركة العزب المعمارية المسجلة رسمياً
+              {t("about.subtitle")}
             </p>
           </div>
 
@@ -22,10 +26,9 @@ const About = () => {
                   <Building className="w-6 h-6 text-primary-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-foreground mb-2">من نحن</h3>
+                  <h3 className="text-2xl font-bold text-foreground mb-2">{t("about.aboutUsTitle")}</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    شركة العزب المعمارية هي شركة رسمية مسجلة تعمل في مجال التصميم المعماري والداخلي 
-                    وتنفيذ المشاريع والخدمات التشغيلية، مع سنوات من الخبرة في السوق المصري.
+                    {t("about.aboutUsDesc")}
                   </p>
                 </div>
               </div>
@@ -37,10 +40,9 @@ const About = () => {
                   <Target className="w-6 h-6 text-secondary-foreground" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-foreground mb-2">رؤيتنا</h3>
+                  <h3 className="text-2xl font-bold text-foreground mb-2">{t("about.visionTitle")}</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    نهدف إلى تقديم حلول متكاملة وحديثة في إدارة أعمال الصيانة والتشغيل، 
-                    وإتاحة خدمات احترافية لعملائنا وفق أعلى معايير الجودة والكفاءة.
+                    {t("about.visionDesc")}
                   </p>
                 </div>
               </div>
@@ -50,20 +52,20 @@ const About = () => {
           <div className="grid md:grid-cols-3 gap-6">
             <Card className="p-6 bg-gradient-primary text-primary-foreground hover:shadow-elevated transition-all text-center animate-scale-in" style={{ animationDelay: "0.2s" }}>
               <Award className="w-10 h-10 mx-auto mb-4" />
-              <h4 className="text-lg font-bold mb-2">شركة معتمدة</h4>
-              <p className="text-sm opacity-90">مسجلة رسمياً وتعمل وفق القوانين المصرية</p>
+              <h4 className="text-lg font-bold mb-2">{t("about.certifiedTitle")}</h4>
+              <p className="text-sm opacity-90">{t("about.certifiedDesc")}</p>
             </Card>
 
             <Card className="p-6 bg-gradient-secondary text-secondary-foreground hover:shadow-elevated transition-all text-center animate-scale-in" style={{ animationDelay: "0.3s" }}>
               <Sparkles className="w-10 h-10 mx-auto mb-4" />
-              <h4 className="text-lg font-bold mb-2">خدمات متكاملة</h4>
-              <p className="text-sm opacity-90">تصميم، تنفيذ، صيانة، وتشغيل</p>
+              <h4 className="text-lg font-bold mb-2">{t("about.integratedTitle")}</h4>
+              <p className="text-sm opacity-90">{t("about.integratedDesc")}</p>
             </Card>
 
             <Card className="p-6 bg-gradient-accent text-accent-foreground hover:shadow-elevated transition-all text-center animate-scale-in" style={{ animationDelay: "0.4s" }}>
               <Target className="w-10 h-10 mx-auto mb-4" />
-              <h4 className="text-lg font-bold mb-2">احترافية عالية</h4>
-              <p className="text-sm opacity-90">أعلى معايير الجودة والاحتراف</p>
+              <h4 className="text-lg font-bold mb-2">{t("about.professionalTitle")}</h4>
+              <p className="text-sm opacity-90">{t("about.professionalDesc")}</p>
             </Card>
           </div>
         </div>
