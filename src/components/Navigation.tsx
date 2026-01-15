@@ -2,45 +2,78 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Building2, Users, Wrench, Info, ChevronRight } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
   const location = useLocation();
   const { t } = useTranslation();
 
   const mainLinks = [
     { path: "/", label: t("nav.home") },
     { path: "/services", label: t("nav.services") },
-    { path: "/projects", label: t("nav.projects") },
-    { path: "/branches", label: t("nav.branches") },
     { path: "/about", label: t("nav.about") },
     { path: "/contact", label: t("nav.contact") },
   ];
 
-  const moreLinks = [
-    { path: "/founder", label: t("nav.founder") },
-    { path: "/pricing", label: t("nav.pricing") },
-    { path: "/enterprise", label: t("nav.enterprise") },
-    { path: "/live-map", label: t("nav.liveMap") },
-    { path: "/faq", label: t("nav.faq") },
-    { path: "/technicians", label: t("nav.technicians") },
-    { path: "/partners", label: t("nav.partners") },
-    { path: "/help", label: t("nav.help") },
-    { path: "/quality-standards", label: t("nav.quality") },
-    { path: "/luxury-finishing", label: t("nav.luxury") },
-    { path: "/brand-identity", label: t("nav.brand") },
-    { path: "/labn-el-asfor", label: t("nav.labn") },
-  ];
+  const menuCategories = {
+    explore: {
+      label: t("nav.explore", "استكشف"),
+      icon: Building2,
+      links: [
+        { path: "/projects", label: t("nav.projects") },
+        { path: "/branches", label: t("nav.branches") },
+        { path: "/live-map", label: t("nav.liveMap") },
+      ]
+    },
+    services: {
+      label: t("nav.ourServices", "خدماتنا"),
+      icon: Wrench,
+      links: [
+        { path: "/enterprise", label: t("nav.enterprise") },
+        { path: "/luxury-finishing", label: t("nav.luxury") },
+        { path: "/pricing", label: t("nav.pricing") },
+        { path: "/quality-standards", label: t("nav.quality") },
+      ]
+    },
+    partners: {
+      label: t("nav.joinUs", "انضم إلينا"),
+      icon: Users,
+      links: [
+        { path: "/technicians", label: t("nav.technicians") },
+        { path: "/partners", label: t("nav.partners") },
+        { path: "/founder", label: t("nav.founder") },
+      ]
+    },
+    info: {
+      label: t("nav.info", "معلومات"),
+      icon: Info,
+      links: [
+        { path: "/faq", label: t("nav.faq") },
+        { path: "/help", label: t("nav.help") },
+        { path: "/brand-identity", label: t("nav.brand") },
+        { path: "/labn-el-asfor", label: t("nav.labn") },
+      ]
+    }
+  };
 
-  const allLinks = [...mainLinks, ...moreLinks];
+  const allLinks = [
+    ...mainLinks,
+    ...Object.values(menuCategories).flatMap(cat => cat.links)
+  ];
 
   return (
     <nav className="bg-primary text-primary-foreground sticky top-0 z-50 shadow-lg">
@@ -59,7 +92,7 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-5">
             {mainLinks.map((link) => (
               <Link
                 key={link.path}
@@ -74,31 +107,44 @@ const Navigation = () => {
               </Link>
             ))}
             
-            {/* Dropdown Menu */}
+            {/* Enhanced Dropdown Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-1 text-sm font-medium text-white/90 hover:text-secondary transition-colors">
+                <button className="flex items-center gap-1.5 text-sm font-medium text-white/90 hover:text-secondary transition-colors">
                   {t("nav.more")}
                   <ChevronDown className="w-4 h-4" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent 
                 align="end" 
-                className="bg-card border-border min-w-[180px] z-[100]"
+                className="bg-card border-border min-w-[220px] z-[100] p-2"
               >
-                {moreLinks.map((link) => (
-                  <DropdownMenuItem key={link.path} asChild>
-                    <Link
-                      to={link.path}
-                      className={`w-full cursor-pointer ${
-                        location.pathname === link.path
-                          ? "text-secondary"
-                          : "text-foreground"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  </DropdownMenuItem>
+                {Object.entries(menuCategories).map(([key, category], index) => (
+                  <div key={key}>
+                    {index > 0 && <DropdownMenuSeparator className="my-1.5" />}
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger className="flex items-center gap-2 cursor-pointer rounded-md">
+                        <category.icon className="w-4 h-4 text-secondary" />
+                        <span>{category.label}</span>
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuSubContent className="bg-card border-border min-w-[180px] p-1.5">
+                        {category.links.map((link) => (
+                          <DropdownMenuItem key={link.path} asChild>
+                            <Link
+                              to={link.path}
+                              className={`w-full cursor-pointer rounded-md ${
+                                location.pathname === link.path
+                                  ? "text-secondary bg-secondary/10"
+                                  : "text-foreground"
+                              }`}
+                            >
+                              {link.label}
+                            </Link>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuSubContent>
+                    </DropdownMenuSub>
+                  </div>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -130,12 +176,12 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden pb-4">
-            {allLinks.map((link) => (
+          <div className="md:hidden pb-4 max-h-[70vh] overflow-y-auto">
+            {mainLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`block py-2 text-sm font-medium transition-colors hover:text-secondary ${
+                className={`block py-2.5 text-sm font-medium transition-colors hover:text-secondary ${
                   location.pathname === link.path
                     ? "text-secondary"
                     : "text-white/90"
@@ -145,6 +191,42 @@ const Navigation = () => {
                 {link.label}
               </Link>
             ))}
+            
+            <div className="border-t border-white/10 my-3" />
+            
+            {Object.entries(menuCategories).map(([key, category]) => (
+              <div key={key} className="mb-2">
+                <button
+                  onClick={() => setMobileSubmenu(mobileSubmenu === key ? null : key)}
+                  className="flex items-center justify-between w-full py-2.5 text-sm font-medium text-white/90 hover:text-secondary transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <category.icon className="w-4 h-4 text-secondary" />
+                    {category.label}
+                  </span>
+                  <ChevronRight className={`w-4 h-4 transition-transform ${mobileSubmenu === key ? 'rotate-90' : ''}`} />
+                </button>
+                {mobileSubmenu === key && (
+                  <div className="ps-6 border-s-2 border-secondary/30 ms-2">
+                    {category.links.map((link) => (
+                      <Link
+                        key={link.path}
+                        to={link.path}
+                        className={`block py-2 text-sm transition-colors hover:text-secondary ${
+                          location.pathname === link.path
+                            ? "text-secondary"
+                            : "text-white/70"
+                        }`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            
             <Button
               size="sm"
               className="w-full mt-4 bg-secondary text-secondary-foreground hover:bg-secondary/90"
