@@ -33,79 +33,234 @@
     "copyright": "© 2025 All Rights Reserved"
   },
   "hero": {
-    "title": "Maintenance Management System",
-    "subtitle": "A comprehensive platform for managing maintenance requests",
+    "badge": "The Next Generation of Maintenance Management",
+    "title": "UberFix",
+    "subtitle": "Smart Maintenance Management",
+    "description": "Enjoy a unique experience in managing your commercial or residential property. We provide practical solutions to keep your property in the best condition.",
     "cta": "Start Now",
-    "learnMore": "Learn More"
+    "demo": "Watch Demo",
+    "scroll": "Scroll to explore",
+    "feature1Title": "Branch Maintenance Management",
+    "feature1Desc": "Centralized management for all maintenance operations in your branches",
+    "feature2Title": "Technician Management",
+    "feature2Desc": "Efficiently organize and distribute tasks to technicians",
+    "feature3Title": "Maintenance Request Management",
+    "feature3Desc": "Track and process maintenance requests easily"
   },
   "features": {
-    "title": "Why UberFix?",
-    "subtitle": "We provide integrated solutions for maintenance management with the highest quality standards",
-    "certifiedTeam": "Certified Team",
-    "certifiedTeamDesc": "Trained and certified technicians with extensive experience",
-    "qualityAssurance": "Quality Assurance",
-    "qualityAssuranceDesc": "We commit to the highest quality standards in every service",
-    "fastResponse": "Fast Response",
-    "fastResponseDesc": "Team available 24/7 to respond to your requests",
-    "competitivePricing": "Competitive Pricing",
-    "competitivePricingDesc": "Best prices while maintaining service quality"
-  },
-  "statistics": {
-    "technicians": "Professional Technicians",
-    "requests": "Maintenance Requests",
-    "clients": "Satisfied Clients",
-    "branches": "Branches"
-  },
-  "cta": {
-    "title": "Start Your Journey With Us Today",
-    "subtitle": "Join thousands of customers who trust our services",
-    "startFree": "Start Free",
-    "bookDemo": "Book a Demo",
-    "phone": "Phone",
-    "email": "Email",
-    "location": "Location"
+    "title": "Why",
+    "titleHighlight": "UberFix",
+    "subtitle": "We provide you with an integrated platform with professional features to manage all your maintenance needs",
+    "feature1Title": "Instant Connection with Technicians",
+    "feature1Desc": "Smart system that connects your request with the nearest specialist technician in minutes",
+    "feature2Title": "Comprehensive Request Management",
+    "feature2Desc": "Track all maintenance requests from start to finish with ease and transparency",
+    "feature3Title": "Fast Response",
+    "feature3Desc": "Standard response time to ensure problems are solved as quickly as possible",
+    "feature4Title": "Quality Assurance",
+    "feature4Desc": "Certified and trusted technicians with warranty on all maintenance work",
+    "feature5Title": "Available 24/7",
+    "feature5Desc": "24/7 service to ensure support is available whenever you need it",
+    "feature6Title": "Detailed Reports",
+    "feature6Desc": "Comprehensive statistics and reports to monitor performance and improve service"
   },
   "about": {
-    "title": "About Us",
-    "subtitle": "Al-Azab Construction Company - Leaders in Integrated Maintenance",
-    "aboutUs": "Who We Are",
-    "aboutUsDesc": "Al-Azab Construction Company is a leading Egyptian company in maintenance and operations",
-    "ourVision": "Our Vision",
-    "ourVisionDesc": "To be the first choice for maintenance services in Egypt and the Middle East",
-    "certified": "Certified Company",
-    "integrated": "Integrated Services",
-    "professional": "High Professionalism"
+    "title": "About",
+    "titleHighlight": "Al-Azab Construction Company",
+    "subtitle": "UberFix platform is part of an integrated system of services from the officially registered Al-Azab Construction Company",
+    "aboutUsTitle": "About Us",
+    "aboutUsDesc": "Al-Azab Construction Company is an officially registered company working in architectural and interior design, project implementation and operational services, with years of experience in the Egyptian market.",
+    "visionTitle": "Our Vision",
+    "visionDesc": "We aim to provide integrated and modern solutions in maintenance and operations management, and to provide professional services to our clients according to the highest standards of quality and efficiency.",
+    "certifiedTitle": "Certified Company",
+    "certifiedDesc": "Officially registered and operates according to Egyptian laws",
+    "integratedTitle": "Integrated Services",
+    "integratedDesc": "Design, implementation, maintenance, and operation",
+    "professionalTitle": "High Professionalism",
+    "professionalDesc": "Highest quality and professionalism standards"
   },
   "howItWorks": {
-    "title": "How Does UberFix Work?",
-    "subtitle": "Simple steps to get maintenance service",
-    "step1Title": "Submit Your Request",
-    "step1Desc": "Submit your maintenance request via the app or website",
-    "step2Title": "Technician Selection",
-    "step2Desc": "We select the most suitable technician closest to you",
-    "step3Title": "Track the Technician",
-    "step3Desc": "Follow the technician's arrival in real-time",
-    "step4Title": "Rate the Service",
-    "step4Desc": "Rate the service and share your feedback"
+    "badge": "How We Work",
+    "title": "Simple Steps to Get Service",
+    "subtitle": "We make the maintenance request process easy and fast in just four steps",
+    "step1Title": "Choose Service",
+    "step1Desc": "Browse our various services and choose what suits your needs",
+    "step2Title": "Set Appointment",
+    "step2Desc": "Choose the time that suits you and we'll be at your location",
+    "step3Title": "Execute Maintenance",
+    "step3Desc": "A professional technician performs the work with highest quality",
+    "step4Title": "Rate Service",
+    "step4Desc": "Share your feedback so we can continue to improve"
+  },
+  "cta": {
+    "title": "Ready for Professional Maintenance Management?",
+    "subtitle": "Join thousands of customers who trust UberFix to manage all their maintenance needs",
+    "startFree": "Start Free",
+    "bookDemo": "Book Demo",
+    "phone": "Call Us",
+    "phoneValue": "+20 XXX XXX XXXX",
+    "email": "Email Us",
+    "emailValue": "info@uberfix.com",
+    "location": "Our Location",
+    "locationValue": "Cairo, Egypt"
+  },
+  "services": {
+    "title": "Our",
+    "titleHighlight": "Diverse Services",
+    "subtitle": "We cover all your maintenance and operation needs with the highest quality standards",
+    "service1Title": "Home Maintenance",
+    "service1Desc": "Comprehensive maintenance for all your home needs including electrical, plumbing, carpentry, and AC",
+    "service1Items": "Electrical,Plumbing,Carpentry,AC",
+    "service2Title": "Building Maintenance",
+    "service2Desc": "Specialized services for residential and administrative buildings with a professional team",
+    "service2Items": "Elevators,Security Systems,Decorations,Facades",
+    "service3Title": "Facility Maintenance",
+    "service3Desc": "Integrated maintenance solutions for large industrial and commercial facilities",
+    "service3Items": "Equipment,Advanced Systems,Regular Maintenance,Emergency",
+    "service4Title": "Finishing & Decoration",
+    "service4Desc": "Design and implementation of interior and exterior decorations with highest quality",
+    "service4Items": "Design,Implementation,Painting,Flooring",
+    "requestService": "Request Service"
+  },
+  "statistics": {
+    "stat1Value": "+10,000",
+    "stat1Label": "Completed Maintenance Requests",
+    "stat1Desc": "Successfully executed",
+    "stat2Value": "+500",
+    "stat2Label": "Professional Technicians",
+    "stat2Desc": "Certified and trained",
+    "stat3Value": "+15",
+    "stat3Label": "Active Branches",
+    "stat3Desc": "Across Egypt",
+    "stat4Value": "98%",
+    "stat4Label": "Customer Satisfaction",
+    "stat4Desc": "Positive rating"
+  },
+  "appPromo": {
+    "badge": "Available on All Devices",
+    "title": "Join the",
+    "titleHighlight": "UberFix",
+    "subtitle": "Whether you're a customer or technician, the app is available for free on all devices",
+    "technicianTitle": "For Professional Technicians",
+    "technicianSubtitle": "Join us for free",
+    "tech1Title": "Completely Free Registration",
+    "tech1Desc": "Register now and get maintenance requests immediately",
+    "tech2Title": "All Specializations Accepted",
+    "tech2Desc": "Electrical, plumbing, AC, carpentry, and more...",
+    "tech3Title": "Continuous and Guaranteed Income",
+    "tech3Desc": "Work with major brands across Egypt",
+    "tech4Title": "Nationwide Coverage",
+    "tech4Desc": "More than 250 locations in 15 governorates",
+    "techCTA": "Register as Technician Now",
+    "customerTitle": "For Customers & Companies",
+    "customerSubtitle": "Smart Maintenance Management",
+    "cust1Title": "Comprehensive Management for All Your Branches",
+    "cust1Desc": "Track all maintenance operations from one place",
+    "cust2Title": "Instant Reports and Analytics",
+    "cust2Desc": "Make data-driven decisions",
+    "cust3Title": "Certified and Trusted Technicians",
+    "cust3Desc": "We select the best technicians to serve your brand",
+    "cust4Title": "Available on Mobile and Web",
+    "cust4Desc": "Easy-to-use app for all devices",
+    "custCTA": "Download App",
+    "availableSoon": "Available Soon On",
+    "downloadText": "Download the app on your favorite device"
   },
   "testimonials": {
     "title": "Customer Reviews",
-    "subtitle": "What our customers say about our services"
+    "subtitle": "What our customers say about our services",
+    "reviews": [
+      {
+        "name": "Mohamed Ahmed",
+        "role": "Property Owner",
+        "content": "Excellent and fast service. The technician arrived on time and completed the work with high quality."
+      },
+      {
+        "name": "Sarah Mahmoud",
+        "role": "Office Manager",
+        "content": "Best maintenance experience I've had. Professional team and reasonable prices."
+      },
+      {
+        "name": "Ahmed Ali",
+        "role": "Company Owner",
+        "content": "An integrated system for maintenance management. Made it easy to follow up on all requests."
+      }
+    ]
   },
-  "services": {
-    "title": "Our Services",
-    "subtitle": "We offer a wide range of specialized maintenance services",
-    "electrical": "Electrical",
-    "plumbing": "Plumbing",
-    "ac": "AC & Cooling",
-    "painting": "Painting",
-    "carpentry": "Carpentry",
-    "cleaning": "Cleaning"
+  "partners": {
+    "heroTitle": "Our Partners in Success",
+    "heroSubtitle": "We are proud to work with a selection of the largest companies and brands in Egypt and the region",
+    "stats": {
+      "partners": "Strategic Partners",
+      "clients": "Satisfied Clients",
+      "locations": "Service Locations",
+      "years": "Years of Experience"
+    },
+    "partnersTitle": "Our Strategic Partners",
+    "partnersSubtitle": "We collaborate with the best companies to provide distinguished services",
+    "partnersList": [
+      { "name": "Amazon Egypt", "desc": "Partner in storage and management solutions" },
+      { "name": "Talaat Moustafa Group", "desc": "Partner in real estate development projects" },
+      { "name": "Orascom", "desc": "Partner in major projects" },
+      { "name": "National Bank of Egypt", "desc": "Strategic financial partner" }
+    ],
+    "clientsTitle": "Our Main Clients",
+    "clientsSubtitle": "We are proud to serve a selection of the largest brands",
+    "clientsList": [
+      { "name": "Carrefour Egypt", "desc": "Serving more than 50 branches" },
+      { "name": "Vodafone Egypt", "desc": "Store maintenance and management" },
+      { "name": "McDonald's Egypt", "desc": "Comprehensive maintenance services" },
+      { "name": "Zara Egypt", "desc": "Store maintenance and operation" },
+      { "name": "IKEA Egypt", "desc": "Integrated maintenance services" },
+      { "name": "City Stars", "desc": "Facility management and maintenance" },
+      { "name": "Mall of Egypt", "desc": "Operation and maintenance services" },
+      { "name": "Cairo Festival City", "desc": "Comprehensive facility maintenance" }
+    ],
+    "ctaTitle": "Want to Become a Partner?",
+    "ctaSubtitle": "Join our partner network and benefit from our distinguished services",
+    "ctaButton": "Contact Us Now"
   },
-  "founder": {
-    "title": "The Founder",
-    "subtitle": "A journey of success from the beginning",
-    "readMore": "Read More"
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Answers to the most common questions",
+    "customerTab": "For Customers",
+    "technicianTab": "For Technicians",
+    "customerQuestions": [
+      {
+        "question": "How can I request a maintenance service?",
+        "answer": "You can request maintenance service through the app or website in simple steps. Choose the required service, set the appropriate time, and a professional technician will be assigned to serve you."
+      },
+      {
+        "question": "How long does it take for the technician to arrive?",
+        "answer": "The technician arrives within 30 minutes to 2 hours depending on your location and the type of service required. We strive to provide the fastest response possible."
+      },
+      {
+        "question": "Are prices fixed?",
+        "answer": "Yes, we offer transparent and pre-set prices for each service. You can know the cost before confirming the order."
+      },
+      {
+        "question": "Is there a warranty on the service?",
+        "answer": "Yes, we provide a warranty on all maintenance work. If you face any problem, we will fix it for free."
+      }
+    ],
+    "technicianQuestions": [
+      {
+        "question": "How can I join as a technician?",
+        "answer": "You can register through the app or website. You will need to submit your documents and skills, and we will contact you to complete the registration process."
+      },
+      {
+        "question": "What specializations are required?",
+        "answer": "We accept all specializations: electrical, plumbing, AC, carpentry, painting, and more. Each specialization has available job opportunities."
+      },
+      {
+        "question": "How is payment made?",
+        "answer": "Your dues are transferred weekly to your bank account or e-wallet as per your choice."
+      },
+      {
+        "question": "Is registration free?",
+        "answer": "Yes, registration is completely free. There are no fees to join the UberFix technician network."
+      }
+    ]
   },
   "common": {
     "learnMore": "Learn More",
