@@ -1,44 +1,13 @@
 import { Users, CheckCircle, MapPin, Award } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useEffect, useState } from "react";
-
-const stats = [
-  {
-    icon: CheckCircle,
-    value: 10000,
-    suffix: "+",
-    label: "طلب صيانة مكتمل",
-    description: "تم تنفيذها بنجاح"
-  },
-  {
-    icon: Users,
-    value: 500,
-    suffix: "+",
-    label: "فني محترف",
-    description: "معتمدين ومدربين"
-  },
-  {
-    icon: MapPin,
-    value: 15,
-    suffix: "+",
-    label: "فرع نشط",
-    description: "في أنحاء مصر"
-  },
-  {
-    icon: Award,
-    value: 98,
-    suffix: "%",
-    label: "رضا العملاء",
-    description: "تقييم إيجابي"
-  }
-];
+import { useTranslation } from "react-i18next";
 
 const CountUpNumber = ({ end, suffix, isVisible }: { end: number; suffix: string; isVisible: boolean }) => {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (!isVisible) return;
-    
     const duration = 2000;
     const steps = 60;
     const increment = end / steps;
@@ -57,18 +26,23 @@ const CountUpNumber = ({ end, suffix, isVisible }: { end: number; suffix: string
     return () => clearInterval(timer);
   }, [end, isVisible]);
 
-  return (
-    <span>
-      {suffix === "+" ? `+${count.toLocaleString()}` : `${count}${suffix}`}
-    </span>
-  );
+  return <span>{suffix === "+" ? `+${count.toLocaleString()}` : `${count}${suffix}`}</span>;
 };
 
 const Statistics = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.3 });
 
+  const stats = [
+    { icon: CheckCircle, value: 10000, suffix: "+", labelKey: "statistics.stat1Label", descKey: "statistics.stat1Desc" },
+    { icon: Users, value: 500, suffix: "+", labelKey: "statistics.stat2Label", descKey: "statistics.stat2Desc" },
+    { icon: MapPin, value: 15, suffix: "+", labelKey: "statistics.stat3Label", descKey: "statistics.stat3Desc" },
+    { icon: Award, value: 98, suffix: "%", labelKey: "statistics.stat4Label", descKey: "statistics.stat4Desc" }
+  ];
+
   return (
-    <section className="py-16 bg-muted" dir="rtl">
+    <section className="py-16 bg-muted" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4">
         <div ref={ref} className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
@@ -88,10 +62,10 @@ const Statistics = () => {
                 <CountUpNumber end={stat.value} suffix={stat.suffix} isVisible={isVisible} />
               </div>
               <div className="text-foreground font-semibold mb-1">
-                {stat.label}
+                {t(stat.labelKey)}
               </div>
               <div className="text-muted-foreground text-sm">
-                {stat.description}
+                {t(stat.descKey)}
               </div>
             </div>
           ))}

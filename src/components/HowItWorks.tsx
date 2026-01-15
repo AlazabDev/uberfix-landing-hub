@@ -1,34 +1,21 @@
 import { CheckCircle, Calendar, Wrench, Star } from "lucide-react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-
-const steps = [
-  {
-    icon: CheckCircle,
-    title: "اختر الخدمة",
-    description: "تصفح خدماتنا المتنوعة واختر ما يناسب احتياجاتك"
-  },
-  {
-    icon: Calendar,
-    title: "حدد الموعد",
-    description: "اختر الوقت المناسب لك وسنكون في موقعك"
-  },
-  {
-    icon: Wrench,
-    title: "نفذ الصيانة",
-    description: "فني محترف يقوم بالعمل بأعلى جودة"
-  },
-  {
-    icon: Star,
-    title: "قيّم الخدمة",
-    description: "شاركنا رأيك لنستمر في التحسين"
-  }
-];
+import { useTranslation } from "react-i18next";
 
 const HowItWorks = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.2 });
 
+  const steps = [
+    { icon: CheckCircle, titleKey: "howItWorks.step1Title", descKey: "howItWorks.step1Desc" },
+    { icon: Calendar, titleKey: "howItWorks.step2Title", descKey: "howItWorks.step2Desc" },
+    { icon: Wrench, titleKey: "howItWorks.step3Title", descKey: "howItWorks.step3Desc" },
+    { icon: Star, titleKey: "howItWorks.step4Title", descKey: "howItWorks.step4Desc" }
+  ];
+
   return (
-    <section className="py-20 bg-muted/30" dir="rtl">
+    <section className="py-20 bg-muted/30" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="container mx-auto px-4">
         <div 
           ref={headerRef}
@@ -40,19 +27,19 @@ const HowItWorks = () => {
           }}
         >
           <span className="text-secondary font-semibold text-sm uppercase tracking-wider">
-            كيف نعمل
+            {t("howItWorks.badge")}
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2">
-            خطوات بسيطة للحصول على الخدمة
+            {t("howItWorks.title")}
           </h2>
           <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-            نحن نجعل عملية طلب الصيانة سهلة وسريعة في أربع خطوات فقط
+            {t("howItWorks.subtitle")}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
-            <StepCard key={index} step={step} index={index} totalSteps={steps.length} />
+            <StepCard key={index} step={step} index={index} totalSteps={steps.length} t={t} isRTL={isRTL} />
           ))}
         </div>
       </div>
@@ -60,7 +47,7 @@ const HowItWorks = () => {
   );
 };
 
-const StepCard = ({ step, index, totalSteps }: { step: typeof steps[0]; index: number; totalSteps: number }) => {
+const StepCard = ({ step, index, totalSteps, t, isRTL }: { step: any; index: number; totalSteps: number; t: any; isRTL: boolean }) => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
 
   return (
@@ -74,9 +61,8 @@ const StepCard = ({ step, index, totalSteps }: { step: typeof steps[0]; index: n
       }}
     >
       <div className="bg-card rounded-2xl p-8 text-center shadow-lg border border-border/50 hover:border-secondary/50 interactive-card cursor-pointer">
-        {/* Step Number */}
         <div 
-          className="absolute -top-4 right-4 w-8 h-8 bg-secondary text-secondary-foreground rounded-full flex items-center justify-center font-bold text-sm glow-effect"
+          className={`absolute -top-4 ${isRTL ? 'right-4' : 'left-4'} w-8 h-8 bg-secondary text-secondary-foreground rounded-full flex items-center justify-center font-bold text-sm glow-effect`}
           style={{
             transform: isVisible ? 'scale(1)' : 'scale(0)',
             transition: `all 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.15 + 0.2}s`
@@ -85,27 +71,24 @@ const StepCard = ({ step, index, totalSteps }: { step: typeof steps[0]; index: n
           {index + 1}
         </div>
         
-        {/* Icon */}
         <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
           <step.icon className="w-8 h-8 text-primary icon-bounce" />
         </div>
         
-        {/* Content */}
         <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-secondary transition-colors duration-300">
-          {step.title}
+          {t(step.titleKey)}
         </h3>
         <p className="text-muted-foreground text-sm">
-          {step.description}
+          {t(step.descKey)}
         </p>
       </div>
       
-      {/* Connector Line */}
       {index < totalSteps - 1 && (
         <div 
-          className="hidden lg:block absolute top-1/2 -left-4 w-8 h-0.5 bg-secondary/50"
+          className={`hidden lg:block absolute top-1/2 ${isRTL ? '-right-4' : '-left-4'} w-8 h-0.5 bg-secondary/50`}
           style={{
             transform: isVisible ? 'scaleX(1)' : 'scaleX(0)',
-            transformOrigin: 'right',
+            transformOrigin: isRTL ? 'left' : 'right',
             transition: `all 0.4s ease ${index * 0.15 + 0.4}s`
           }}
         />
