@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { useTranslation } from 'react-i18next';
 
 interface BranchLocation {
   name: string;
@@ -10,6 +11,8 @@ interface BranchLocation {
 }
 
 const GlobalMap = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -27,15 +30,15 @@ const GlobalMap = () => {
       .then((data) => setBranches(data))
       .catch((error) => {
         console.error('Error loading branch locations:', error);
-        setMapError('تعذر تحميل مواقع الفروع حاليًا.');
+        setMapError(t('globalMap.errorLoadingBranches'));
       });
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (!mapContainer.current || branches.length === 0) return;
 
     if (!mapboxToken) {
-      setMapError('مطلوب مفتاح Mapbox صالح لعرض الخريطة.');
+      setMapError(t('globalMap.errorMapboxKey'));
       return;
     }
 
@@ -53,7 +56,7 @@ const GlobalMap = () => {
     });
 
     map.current.on('error', () => {
-      setMapError('حدث خطأ أثناء تحميل الخريطة. يرجى المحاولة لاحقًا.');
+      setMapError(t('globalMap.errorLoadingMap'));
     });
 
     map.current.addControl(
@@ -144,7 +147,7 @@ const GlobalMap = () => {
         closeButton: false,
         className: 'custom-popup'
       }).setHTML(`
-        <div style="padding: 8px; text-align: center; direction: rtl;">
+        <div style="padding: 8px; text-align: center; direction: ${isRTL ? 'rtl' : 'ltr'};">
           <strong style="color: #f59e0b; font-size: 14px;">${branch.name}</strong>
         </div>
       `);
@@ -160,7 +163,7 @@ const GlobalMap = () => {
     return () => {
       map.current?.remove();
     };
-  }, [branches, mapboxToken]);
+  }, [branches, mapboxToken, isRTL, t]);
 
   return (
     <section className="relative py-20 bg-background overflow-hidden" style={{ backgroundColor: '#f4f4f4' }}>
@@ -168,13 +171,13 @@ const GlobalMap = () => {
 
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-12 animate-fade-in" dir="rtl">
+        <div className="text-center mb-12 animate-fade-in" dir={isRTL ? 'rtl' : 'ltr'}>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            شبكة عالمية من
-            <span className="bg-gradient-primary bg-clip-text text-transparent"> الشركاء</span>
+            {t('globalMap.title')}
+            <span className="bg-gradient-primary bg-clip-text text-transparent"> {t('globalMap.titleHighlight')}</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            نخدم أكثر من {branches.length} موقع لعملائنا من العلامات التجارية الكبرى وسلاسل الإمداد في مصر
+            {t('globalMap.subtitle', { count: branches.length })}
           </p>
         </div>
 
@@ -183,14 +186,14 @@ const GlobalMap = () => {
 
           {mapError ? (
             <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-              <p className="text-base font-medium text-muted-foreground" dir="rtl">
+              <p className="text-base font-medium text-muted-foreground" dir={isRTL ? 'rtl' : 'ltr'}>
                 {mapError}
               </p>
             </div>
           ) : (
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-card/90 backdrop-blur-sm px-6 py-3 rounded-full border border-border shadow-lg" dir="rtl">
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-card/90 backdrop-blur-sm px-6 py-3 rounded-full border border-border shadow-lg" dir={isRTL ? 'rtl' : 'ltr'}>
               <p className="text-sm text-foreground font-medium">
-                🌍 {branches.length} موقع نشط • <span className="text-primary">خدمة 24/7</span>
+                🌍 {t('globalMap.activeLocations', { count: branches.length })} • <span className="text-primary">{t('globalMap.service247')}</span>
               </p>
             </div>
           )}
