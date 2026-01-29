@@ -284,5 +284,61 @@
     "step1": "Tap the Share button",
     "step2": "Choose 'Add to Home Screen'",
     "step3": "Tap 'Add' to confirm"
+  },
+  "technicianCTA": {
+    "badge": "Opportunity for Professional Technicians",
+    "title": "Join the",
+    "titleHighlight": "UberFix",
+    "titleEnd": "Technician Network",
+    "description": "Be part of the largest network of professional technicians in Egypt. Get continuous requests, stable income, and real professional development opportunities.",
+    "benefit1": "Stable income and bonuses",
+    "benefit2": "Training and professional development",
+    "benefit3": "Continuous daily requests",
+    "cta": "Register Now as a Professional Technician",
+    "stat1Value": "+500",
+    "stat1Label": "Active Technicians",
+    "stat2Value": "+15",
+    "stat2Label": "Branches in Egypt",
+    "stat3Value": "98%",
+    "stat3Label": "Customer Satisfaction",
+    "stat4Value": "24/7",
+    "stat4Label": "Technical Support",
+    "avgIncomeLabel": "Average Monthly Income",
+    "avgIncomeValue": "+15,000 EGP"
+  },
+  "maintenanceTimeline": {
+    "title": "Maintenance Request Journey",
+    "subtitle": "From request submission to completion, an easy and transparent experience",
+    "step1Number": "01",
+    "step1Title": "Submit Maintenance Request",
+    "step1Desc": "Register your maintenance request via the app or website, specifying the problem type, location, and suitable time",
+    "step1Features": "Select service type,Upload problem photos,Choose suitable time",
+    "step2Number": "02",
+    "step2Title": "Assign Suitable Technician",
+    "step2Desc": "Your request is matched with the best specialist technician in your area based on service type and ratings",
+    "step2Features": "Smart automatic selection,Review technician profile,Confirm appointment",
+    "step3Number": "03",
+    "step3Title": "Execute Maintenance Work",
+    "step3Desc": "The technician arrives on time with all necessary tools and equipment to complete the work",
+    "step3Features": "Live technician tracking,Instant communication,Work quality guarantee",
+    "step4Number": "04",
+    "step4Title": "Payment and Rating",
+    "step4Desc": "After work completion, pay securely and share your rating to help others",
+    "step4Features": "Secure multi-method payment,Electronic invoice,Rate service"
+  },
+  "globalMap": {
+    "title": "Global Network of",
+    "titleHighlight": "Partners",
+    "subtitle": "We serve more than {count} locations for our clients from major brands and supply chains in Egypt",
+    "activeLocations": "{count} active locations",
+    "service247": "24/7 service",
+    "errorLoadingBranches": "Unable to load branch locations currently.",
+    "errorMapboxKey": "A valid Mapbox key is required to display the map.",
+    "errorLoadingMap": "An error occurred while loading the map. Please try again later."
+  },
+  "founder": {
+    "title": "From Technician to Founder and CEO of Al-Azab Company",
+    "description": "The story started from the field... from maintenance... from real hard work. A long journey of learning, discipline, and building trust, until Al-Azab Company was established to become one of the fastest-growing systems in the Egyptian market, providing integrated solutions for engineering, operation, and maintenance.",
+    "cta": "Discover the Founder's Story"
   }
 }
