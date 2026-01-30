@@ -3,6 +3,7 @@
     "home": "Home",
     "services": "Services",
     "projects": "Projects",
+    "portfolio": "Portfolio",
     "branches": "Branches",
     "about": "About Us",
     "contact": "Contact",
@@ -340,5 +341,26 @@
     "title": "From Technician to Founder and CEO of Al-Azab Company",
     "description": "The story started from the field... from maintenance... from real hard work. A long journey of learning, discipline, and building trust, until Al-Azab Company was established to become one of the fastest-growing systems in the Egyptian market, providing integrated solutions for engineering, operation, and maintenance.",
     "cta": "Discover the Founder's Story"
+  },
+  "portfolio": {
+    "badge": "Our Portfolio",
+    "title": "Our Outstanding",
+    "titleHighlight": "Work",
+    "subtitle": "Browse through our best maintenance and finishing projects executed for our clients with the highest standards of quality and professionalism",
+    "projects": "Projects",
+    "images": "Images",
+    "videos": "Videos",
+    "all": "All",
+    "allCategories": "All Categories",
+    "noResults": "No Results Found",
+    "tryFilters": "Try changing the filters",
+    "electrical": "Electrical",
+    "plumbing": "Plumbing",
+    "ac": "AC",
+    "carpentry": "Carpentry",
+    "painting": "Painting",
+    "finishing": "Finishing",
+    "projectTitle": "Maintenance Project",
+    "videoTitle": "Maintenance Video"
   }
 }
