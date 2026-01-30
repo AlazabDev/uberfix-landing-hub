@@ -36,6 +36,7 @@ const Navigation = () => {
       icon: Building2,
       links: [
         { path: "/projects", label: t("nav.projects") },
+        { path: "/portfolio", label: t("nav.portfolio", "معرض الأعمال") },
         { path: "/branches", label: t("nav.branches") },
         { path: "/live-map", label: t("nav.liveMap") },
       ]

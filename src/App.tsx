@@ -25,7 +25,7 @@ import EnterpriseServices from "./pages/EnterpriseServices";
 import MaterialsPricing from "./pages/MaterialsPricing";
 import Founder from "./pages/Founder";
 import Install from "./pages/Install";
-
+import Portfolio from "./pages/Portfolio";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -56,6 +56,7 @@ const App = () => (
           <Route path="/pricing" element={<MaterialsPricing />} />
           <Route path="/founder" element={<Founder />} />
           <Route path="/install" element={<Install />} />
+          <Route path="/portfolio" element={<Portfolio />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
