@@ -8,6 +8,7 @@ interface GalleryItem {
   src: string;
   thumbnail?: string;
   title?: string;
+  description?: string;
   category?: string;
 }
 
@@ -134,9 +135,14 @@ const GalleryGrid = ({ items, onItemClick }: GalleryGridProps) => {
                 </span>
               )}
               {item.title && (
-                <h3 className="text-white font-semibold text-sm line-clamp-2">
+                <h3 className="text-white font-semibold text-sm line-clamp-1">
                   {item.title}
                 </h3>
+              )}
+              {item.description && (
+                <p className="text-white/80 text-xs line-clamp-2 mt-1">
+                  {item.description}
+                </p>
               )}
             </div>
           </div>

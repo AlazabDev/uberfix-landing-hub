@@ -8,6 +8,7 @@ interface GalleryLightboxProps {
     type: 'image' | 'video';
     src: string;
     title?: string;
+    description?: string;
     category?: string;
   }>;
   currentIndex: number;
@@ -173,17 +174,24 @@ const GalleryLightbox = ({ items, currentIndex, isOpen, onClose, onNavigate }: G
         </motion.div>
         
         {/* Info Bar */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 bg-black/60 backdrop-blur-sm px-6 py-3 rounded-full">
-          <span className="text-white/80 text-sm">
-            {currentIndex + 1} / {items.length}
-          </span>
-          {currentItem.title && (
-            <span className="text-white font-medium">{currentItem.title}</span>
-          )}
-          {currentItem.category && (
-            <span className="text-secondary text-sm px-3 py-1 bg-secondary/20 rounded-full">
-              {currentItem.category}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 bg-black/60 backdrop-blur-sm px-6 py-4 rounded-2xl max-w-[90vw]">
+          <div className="flex items-center gap-4">
+            <span className="text-white/80 text-sm">
+              {currentIndex + 1} / {items.length}
             </span>
+            {currentItem.title && (
+              <span className="text-white font-medium">{currentItem.title}</span>
+            )}
+            {currentItem.category && (
+              <span className="text-secondary text-sm px-3 py-1 bg-secondary/20 rounded-full">
+                {currentItem.category}
+              </span>
+            )}
+          </div>
+          {currentItem.description && (
+            <p className="text-white/70 text-sm text-center max-w-lg">
+              {currentItem.description}
+            </p>
           )}
         </div>
       </motion.div>
