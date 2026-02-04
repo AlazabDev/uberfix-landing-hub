@@ -39,8 +39,8 @@ const Footer = () => {
             <ul className="space-y-2 text-muted-foreground">
               <li><a href="/luxury-finishing" className="hover:text-secondary transition-colors">{t("nav.luxury")}</a></li>
               <li><a href="/brand-identity" className="hover:text-secondary transition-colors">{t("nav.brand")}</a></li>
-              <li><a href="/labn-el-asfor" className="hover:text-secondary transition-colors">{t("nav.labn")}</a></li>
-              <li><a href="/quality-standards" className="hover:text-secondary transition-colors">{t("nav.quality")}</a></li>
+              <li><a href="/labn-elasfor" className="hover:text-secondary transition-colors">{t("nav.labn")}</a></li>
+              <li><a href="/services" className="hover:text-secondary transition-colors">{t("nav.uberfix", "UberFix")}</a></li>
             </ul>
           </div>
 
