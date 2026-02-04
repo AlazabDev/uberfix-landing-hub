@@ -66,6 +66,7 @@ const LiveMap = () => {
   const [branches, setBranches] = useState<BranchLocation[]>([]);
   const [technicians, setTechnicians] = useState<Technician[]>([]);
   const [selectedBranch, setSelectedBranch] = useState<BranchLocation | null>(null);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   // Load branches
   useEffect(() => {
@@ -107,16 +108,37 @@ const LiveMap = () => {
 
   // Initialize map
   useEffect(() => {
-    if (!mapContainer.current || branches.length === 0 || !mapboxToken) return;
+    if (!mapContainer.current || branches.length === 0) return;
+
+    if (!mapboxToken) {
+      setMapError("مفتاح Mapbox غير موجود (VITE_MAPBOX_TOKEN)");
+      return;
+    }
+    if (mapboxToken.startsWith("sk.")) {
+      setMapError("لا يمكن استخدام مفتاح سري (sk.*). استخدم مفتاح عام (pk.*) مع Mapbox GL.");
+      return;
+    }
+    if (!mapboxToken.startsWith("pk.")) {
+      setMapError("صيغة مفتاح Mapbox غير صحيحة. يجب أن يبدأ بـ pk.*");
+      return;
+    }
+
+    setMapError(null);
 
     mapboxgl.accessToken = mapboxToken;
 
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v12",
-      center: [31.2357, 30.0444], // Cairo center
-      zoom: 11,
-    });
+    try {
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: "mapbox://styles/mapbox/streets-v12",
+        center: [31.2357, 30.0444], // Cairo center
+        zoom: 11,
+      });
+    } catch (e) {
+      console.error("Mapbox initialization error:", e);
+      setMapError("تعذر تحميل الخريطة. تحقق من صلاحية مفتاح Mapbox.");
+      return;
+    }
 
     map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
 
@@ -348,6 +370,18 @@ const LiveMap = () => {
       {/* Map Section */}
       <section className="relative" style={{ height: "calc(100vh - 200px)", minHeight: "600px" }}>
         <div ref={mapContainer} className="absolute inset-0" />
+
+        {mapError ? (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/80 backdrop-blur-sm" dir="rtl">
+            <div className="max-w-xl rounded-xl border border-border bg-card p-6 shadow-lg">
+              <p className="text-foreground font-bold mb-2">حدث خطأ في تحميل الخريطة</p>
+              <p className="text-muted-foreground text-sm leading-relaxed">{mapError}</p>
+              <p className="text-muted-foreground text-xs mt-3">
+                ملاحظة: إذا كان المفتاح Public (pk.*) لكنه ما زال يعطي 401، راجع إعدادات تقييد الـ URL داخل Mapbox.
+              </p>
+            </div>
+          </div>
+        ) : null}
         
         {/* Legend */}
         <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg z-10" dir="rtl">

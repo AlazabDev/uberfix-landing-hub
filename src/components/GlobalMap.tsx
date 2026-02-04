@@ -10,6 +10,17 @@ interface BranchLocation {
   url?: string;
 }
 
+function getMapboxTokenError(token: string | undefined): string | null {
+  if (!token) return 'Mapbox token is missing.';
+  if (token.startsWith('sk.')) {
+    return 'Invalid Mapbox token type: use a public token (pk.*), not a secret token (sk.*).';
+  }
+  if (!token.startsWith('pk.')) {
+    return 'Invalid Mapbox token format: expected a public token starting with pk.*.';
+  }
+  return null;
+}
+
 const GlobalMap = () => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
@@ -37,8 +48,10 @@ const GlobalMap = () => {
   useEffect(() => {
     if (!mapContainer.current || branches.length === 0) return;
 
-    if (!mapboxToken) {
-      setMapError(t('globalMap.errorMapboxKey'));
+    const tokenError = getMapboxTokenError(mapboxToken);
+    if (tokenError) {
+      // Keep translation key for existing UI, but include a concrete hint for debugging.
+      setMapError(`${t('globalMap.errorMapboxKey')} (${tokenError})`);
       return;
     }
 
@@ -46,14 +59,20 @@ const GlobalMap = () => {
 
     mapboxgl.accessToken = mapboxToken;
     
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/standard',
-      projection: { name: 'globe' },
-      zoom: 1.5,
-      center: [30, 20],
-      pitch: 0,
-    });
+    try {
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/standard',
+        projection: { name: 'globe' },
+        zoom: 1.5,
+        center: [30, 20],
+        pitch: 0,
+      });
+    } catch (e) {
+      console.error('Mapbox initialization error:', e);
+      setMapError(t('globalMap.errorLoadingMap'));
+      return;
+    }
 
     map.current.on('error', () => {
       setMapError(t('globalMap.errorLoadingMap'));
