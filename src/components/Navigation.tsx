@@ -45,10 +45,10 @@ const Navigation = () => {
       label: t("nav.ourServices", "خدماتنا"),
       icon: Wrench,
       links: [
-        { path: "/enterprise", label: t("nav.enterprise") },
         { path: "/luxury-finishing", label: t("nav.luxury") },
-        { path: "/pricing", label: t("nav.pricing") },
-        { path: "/quality-standards", label: t("nav.quality") },
+        { path: "/brand-identity", label: t("nav.brand") },
+        { path: "/labn-elasfor", label: t("nav.labn") },
+        { path: "/services", label: t("nav.uberfix", "UberFix") },
       ]
     },
     partners: {
@@ -66,8 +66,9 @@ const Navigation = () => {
       links: [
         { path: "/faq", label: t("nav.faq") },
         { path: "/help", label: t("nav.help") },
-        { path: "/brand-identity", label: t("nav.brand") },
-        { path: "/labn-el-asfor", label: t("nav.labn") },
+        { path: "/enterprise", label: t("nav.enterprise") },
+        { path: "/quality-standards", label: t("nav.quality") },
+        { path: "/pricing", label: t("nav.pricing") },
       ]
     }
   };
