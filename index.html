@@ -46,6 +46,10 @@
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 
+     <!-- Capacitor/Native App -->
+     <meta name="capacitor" content="true" />
+     <meta name="screen-orientation" content="portrait" />
+ 
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -54,5 +58,11 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+     <script>
+       // Capacitor initialization check
+       if (window.Capacitor) {
+         document.body.classList.add('capacitor-app');
+       }
+     </script>
   </body>
 </html>
