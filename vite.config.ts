@@ -30,16 +30,40 @@ export default defineConfig(({ mode }) => ({
         lang: "ar",
         icons: [
           {
-            src: "/icons/icon-w.png",
+             src: "/icons/app-icon-192.png",
             sizes: "192x192",
             type: "image/png",
             purpose: "any"
           },
           {
-            src: "/icons/mainicon.png",
+             src: "/icons/app-icon-512.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable"
+           },
+           {
+             src: "/icons/app-icon-48.png",
+             sizes: "48x48",
+             type: "image/png",
+             purpose: "any"
+           },
+           {
+             src: "/icons/app-icon-72.png",
+             sizes: "72x72",
+             type: "image/png",
+             purpose: "any"
+           },
+           {
+             src: "/icons/app-icon-96.png",
+             sizes: "96x96",
+             type: "image/png",
+             purpose: "any"
+           },
+           {
+             src: "/icons/app-icon-144.png",
+             sizes: "144x144",
+             type: "image/png",
+             purpose: "any"
           }
         ],
         screenshots: [
