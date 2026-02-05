@@ -32,7 +32,14 @@
     "privacy": "Privacy Policy",
     "termsShort": "Terms",
     "privacyShort": "Privacy",
-    "copyright": "© 2025 All Rights Reserved"
+    "copyright": "© 2025 All Rights Reserved",
+    "newsletter": "Newsletter",
+    "newsletterDesc": "Subscribe to get the latest offers and news",
+    "emailPlaceholder": "Your email address",
+    "subscribe": "Subscribe Now",
+    "subscribing": "Subscribing...",
+    "subscribeSuccess": "Subscribed Successfully!",
+    "subscribeSuccessDesc": "Thank you for subscribing to our newsletter"
   },
   "hero": {
     "badge": "The Next Generation of Maintenance Management",
