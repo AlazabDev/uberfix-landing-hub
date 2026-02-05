@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown, Building2, Users, Wrench, Info, ChevronRight, ChevronLeft } from "lucide-react";
+import { Menu, X, ChevronDown, Building2, Users, Wrench, Info, ChevronRight, ChevronLeft, Sparkles, Palette, Package } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -87,7 +87,8 @@ const Navigation = () => {
             <img 
               src="/icons/uberfix-icon.gif" 
               alt="UberFix" 
-              className="w-10 h-10 rounded-lg"
+              className="w-10 h-10 rounded-lg bg-transparent"
+              style={{ background: 'transparent' }}
             />
             <div className="text-2xl font-bold text-white">
               <span className="text-secondary">Uber</span>Fix
@@ -95,12 +96,12 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-5">
+          <div className="hidden md:flex items-center gap-5 h-full">
             {mainLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-secondary ${
+                className={`text-sm font-medium transition-colors hover:text-secondary flex items-center h-full ${
                   location.pathname === link.path
                     ? "text-secondary"
                     : "text-white/90"
@@ -113,7 +114,7 @@ const Navigation = () => {
             {/* Enhanced Dropdown Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-1.5 text-sm font-medium text-white/90 hover:text-secondary transition-colors">
+                <button className="flex items-center gap-1.5 text-sm font-medium text-white/90 hover:text-secondary transition-colors h-full">
                   {t("nav.more")}
                   <ChevronDown className="w-4 h-4" />
                 </button>
@@ -155,11 +156,13 @@ const Navigation = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <LanguageSwitcher />
+            <div className="flex items-center h-full">
+              <LanguageSwitcher />
+            </div>
 
             <Button
               size="sm"
-              className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+              className="bg-secondary text-secondary-foreground hover:bg-secondary/90 flex items-center"
               asChild
             >
               <a href="https://uberfix.shop" target="_blank" rel="noopener noreferrer">

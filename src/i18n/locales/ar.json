@@ -32,7 +32,14 @@
     "privacy": "سياسة الخصوصية",
     "termsShort": "الشروط",
     "privacyShort": "الخصوصية",
-    "copyright": "© 2025 جميع الحقوق محفوظة"
+    "copyright": "© 2025 جميع الحقوق محفوظة",
+    "newsletter": "النشرة البريدية",
+    "newsletterDesc": "اشترك للحصول على آخر العروض والأخبار",
+    "emailPlaceholder": "بريدك الإلكتروني",
+    "subscribe": "اشترك الآن",
+    "subscribing": "جاري الاشتراك...",
+    "subscribeSuccess": "تم الاشتراك بنجاح!",
+    "subscribeSuccessDesc": "شكراً لاشتراكك في نشرتنا البريدية"
   },
   "hero": {
     "badge": "الجيل القادم من إدارة الصيانة",
