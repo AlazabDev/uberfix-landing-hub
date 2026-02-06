@@ -13,6 +13,7 @@ import TechnicianCTA from "@/components/TechnicianCTA";
 import GlobalMap from "@/components/GlobalMap";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import FloatingChatButton from "@/components/chat/FloatingChatButton";
 
 const Index = () => {
   return (
@@ -35,6 +36,7 @@ const Index = () => {
       <GlobalMap />
       <CTA />
       <Footer />
+      <FloatingChatButton />
     </div>
   );
 };
