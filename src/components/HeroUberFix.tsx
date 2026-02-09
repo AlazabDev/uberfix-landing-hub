@@ -142,21 +142,24 @@ const HeroUberFix: React.FC = () => {
       });
     };
 
-    const animate = () => {
+    // Animation loop is started below with proper cleanup
+
+    createParticles();
+    let animationId: number;
+    const animateLoop = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       updateParticles();
       connectParticles();
       drawParticles();
-      requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animateLoop);
     };
-
-    createParticles();
-    animate();
+    animationId = requestAnimationFrame(animateLoop);
     window.addEventListener('resize', resizeCanvas);
     canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
+      cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resizeCanvas);
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);

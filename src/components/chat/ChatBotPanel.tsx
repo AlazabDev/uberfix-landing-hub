@@ -42,7 +42,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const recordingInterval = useRef<NodeJS.Timeout | null>(null);
+  const recordingInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const quickActions = isRTL ? [
     "احجز خدمة صيانة",
