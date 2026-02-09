@@ -27,6 +27,7 @@ import Founder from "./pages/Founder";
 import Install from "./pages/Install";
 import Portfolio from "./pages/Portfolio";
 import Dashboard from "./pages/Dashboard";
+import ChatBotSettings from "./pages/ChatBotSettings";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -59,6 +60,7 @@ const App = () => (
           <Route path="/install" element={<Install />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/chatbot-settings" element={<ChatBotSettings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
