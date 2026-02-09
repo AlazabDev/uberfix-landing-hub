@@ -51,6 +51,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
+import { Settings } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -224,13 +226,21 @@ const Dashboard = () => {
       
       <main className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
-            {isRTL ? "لوحة تحكم التذاكر" : "Tickets Dashboard"}
-          </h1>
-          <p className="text-muted-foreground">
-            {isRTL ? "إدارة ومتابعة طلبات الدعم والصيانة" : "Manage and track support and maintenance requests"}
-          </p>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">
+              {isRTL ? "لوحة تحكم التذاكر" : "Tickets Dashboard"}
+            </h1>
+            <p className="text-muted-foreground">
+              {isRTL ? "إدارة ومتابعة طلبات الدعم والصيانة" : "Manage and track support and maintenance requests"}
+            </p>
+          </div>
+          <Link to="/chatbot-settings">
+            <Button variant="outline" className="gap-2">
+              <Settings className="w-4 h-4" />
+              {isRTL ? "إعدادات الشات بوت" : "Chatbot Settings"}
+            </Button>
+          </Link>
         </div>
 
         {/* Stats Cards */}
