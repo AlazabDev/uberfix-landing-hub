@@ -185,8 +185,8 @@ const GlobalMap = () => {
   }, [branches, mapboxToken, isRTL, t]);
 
   return (
-    <section className="relative py-20 bg-background overflow-hidden" style={{ backgroundColor: '#f4f4f4' }}>
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#ffffff22] to-transparent pointer-events-none" />
+    <section className="relative py-20 bg-muted overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/10 to-transparent pointer-events-none" />
 
       
       <div className="container mx-auto px-4 relative z-10">
