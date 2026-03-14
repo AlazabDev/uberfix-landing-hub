@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
+import ReactMarkdown from "react-markdown";
 
 interface Message {
   id: string;
@@ -26,6 +27,7 @@ interface ChatBotPanelProps {
 }
 
 const WHATSAPP_NUMBER = "201028291995";
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
 const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const { t, i18n } = useTranslation();
@@ -51,6 +53,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const recordingInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   const quickActions = isRTL ? [
     "احجز خدمة صيانة",
@@ -70,9 +73,8 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
 
   useEffect(() => {
     return () => {
-      if (recordingInterval.current) {
-        clearInterval(recordingInterval.current);
-      }
+      if (recordingInterval.current) clearInterval(recordingInterval.current);
+      if (abortRef.current) abortRef.current.abort();
     };
   }, []);
 
@@ -82,43 +84,148 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
       .slice(-3)
       .map(m => m.content)
       .join("\n");
-
     const greeting = isRTL ? "مرحباً، أريد المساعدة:" : "Hello, I need help:";
     const text = encodeURIComponent(`${greeting}\n${lastMessages}`);
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
   }, [messages, isRTL]);
 
-  const addBotResponse = useCallback((content: string, delay = 1500) => {
+  const streamAIResponse = useCallback(async (userMessage: string, allMessages: Message[]) => {
     setIsTyping(true);
-    setTimeout(() => {
+
+    // Build conversation history for AI (last 10 messages for context)
+    const history = allMessages
+      .slice(-10)
+      .map(m => ({
+        role: m.role === "bot" ? "assistant" as const : "user" as const,
+        content: m.content,
+      }));
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    try {
+      const resp = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ messages: history }),
+        signal: controller.signal,
+      });
+
+      if (!resp.ok) {
+        const errData = await resp.json().catch(() => ({}));
+        throw new Error(errData.error || `Error ${resp.status}`);
+      }
+
+      if (!resp.body) throw new Error("No response body");
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let textBuffer = "";
+      let assistantContent = "";
+      const assistantId = (Date.now() + 1).toString();
+
+      // Add empty assistant message
       setMessages(prev => [...prev, {
-        id: (Date.now() + 1).toString(),
-        content,
+        id: assistantId,
+        content: "",
         role: "bot",
         timestamp: new Date(),
       }]);
       setIsTyping(false);
-    }, delay);
-  }, []);
+
+      let streamDone = false;
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        textBuffer += decoder.decode(value, { stream: true });
+
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") { streamDone = true; break; }
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (content) {
+              assistantContent += content;
+              const finalContent = assistantContent;
+              setMessages(prev =>
+                prev.map(m => m.id === assistantId ? { ...m, content: finalContent } : m)
+              );
+            }
+          } catch {
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
+        }
+      }
+
+      // Final flush
+      if (textBuffer.trim()) {
+        for (let raw of textBuffer.split("\n")) {
+          if (!raw) continue;
+          if (raw.endsWith("\r")) raw = raw.slice(0, -1);
+          if (raw.startsWith(":") || raw.trim() === "") continue;
+          if (!raw.startsWith("data: ")) continue;
+          const jsonStr = raw.slice(6).trim();
+          if (jsonStr === "[DONE]") continue;
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (content) {
+              assistantContent += content;
+              const finalContent = assistantContent;
+              setMessages(prev =>
+                prev.map(m => m.id === assistantId ? { ...m, content: finalContent } : m)
+              );
+            }
+          } catch { /* ignore */ }
+        }
+      }
+    } catch (err: any) {
+      if (err.name === "AbortError") return;
+      setIsTyping(false);
+      const errorMsg = isRTL
+        ? "عذراً، حدث خطأ. يرجى المحاولة مرة أخرى أو التواصل عبر واتساب."
+        : "Sorry, an error occurred. Please try again or contact us via WhatsApp.";
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 2).toString(),
+        content: errorMsg,
+        role: "bot",
+        timestamp: new Date(),
+      }]);
+      toast({
+        title: isRTL ? "خطأ" : "Error",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+  }, [isRTL, toast]);
 
   const handleSendMessage = () => {
     if (!inputValue.trim()) return;
-
-    setMessages(prev => [...prev, {
+    const userMsg: Message = {
       id: Date.now().toString(),
       content: inputValue,
       role: "user",
       timestamp: new Date(),
       type: "text",
-    }]);
+    };
+    const newMessages = [...messages, userMsg];
+    setMessages(newMessages);
     setInputValue("");
-
-    const ticketId = Math.floor(Math.random() * 10000);
-    addBotResponse(
-      isRTL
-        ? `شكراً لرسالتك! تم إنشاء تذكرة دعم #${ticketId}. سيتم الرد عليك قريباً.`
-        : `Thank you! Support ticket #${ticketId} created. You'll hear back soon.`
-    );
+    streamAIResponse(inputValue, newMessages);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: "image" | "file") => {
@@ -128,39 +235,31 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     if (type === "image") {
       const reader = new FileReader();
       reader.onload = () => {
-        setMessages(prev => [...prev, {
+        const imgMsg: Message = {
           id: Date.now().toString(),
           content: isRTL ? "📸 صورة مرفقة" : "📸 Image attached",
           role: "user",
           timestamp: new Date(),
           type: "image",
           attachment: reader.result as string,
-        }]);
-        const ticketId = Math.floor(Math.random() * 10000);
-        addBotResponse(
-          isRTL
-            ? `تم استلام الصورة وتسجيلها. رقم التذكرة: #${ticketId}`
-            : `Image received and logged. Ticket #${ticketId}`,
-          2000
-        );
+        };
+        const newMessages = [...messages, imgMsg];
+        setMessages(newMessages);
+        streamAIResponse(isRTL ? "أرسلت لك صورة، كيف يمكنك مساعدتي؟" : "I sent you an image, how can you help?", newMessages);
       };
       reader.readAsDataURL(file);
     } else {
-      setMessages(prev => [...prev, {
+      const fileMsg: Message = {
         id: Date.now().toString(),
         content: isRTL ? `📎 ملف: ${file.name}` : `📎 File: ${file.name}`,
         role: "user",
         timestamp: new Date(),
         type: "file",
         fileName: file.name,
-      }]);
-      const ticketId = Math.floor(Math.random() * 10000);
-      addBotResponse(
-        isRTL
-          ? `تم استلام الملف "${file.name}". رقم التذكرة: #${ticketId}`
-          : `File "${file.name}" received. Ticket #${ticketId}`,
-        2000
-      );
+      };
+      const newMessages = [...messages, fileMsg];
+      setMessages(newMessages);
+      streamAIResponse(isRTL ? `أرسلت ملف بعنوان ${file.name}` : `I sent a file named ${file.name}`, newMessages);
     }
     if (e.target) e.target.value = "";
   };
@@ -170,7 +269,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
       setIsRecording(false);
       if (recordingInterval.current) clearInterval(recordingInterval.current);
 
-      setMessages(prev => [...prev, {
+      const voiceMsg: Message = {
         id: Date.now().toString(),
         content: isRTL
           ? `🎙️ رسالة صوتية (${recordingTime} ثانية)`
@@ -178,15 +277,13 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
         role: "user",
         timestamp: new Date(),
         type: "voice",
-      }]);
+      };
+      const newMessages = [...messages, voiceMsg];
+      setMessages(newMessages);
       setRecordingTime(0);
-
-      const ticketId = Math.floor(Math.random() * 10000);
-      addBotResponse(
-        isRTL
-          ? `تم استلام الرسالة الصوتية. رقم التذكرة: #${ticketId}`
-          : `Voice message received. Ticket #${ticketId}`,
-        2000
+      streamAIResponse(
+        isRTL ? "أرسلت رسالة صوتية، أريد المساعدة في خدمات الصيانة" : "I sent a voice message, I need help with maintenance services",
+        newMessages
       );
     } else {
       setIsRecording(true);
@@ -235,12 +332,11 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
             </h3>
             <p className="text-primary-foreground/60 text-[11px] flex items-center gap-1">
               <Sparkles className="w-3 h-3" />
-              {isRTL ? "متصل الآن" : "Online now"}
+              {isRTL ? "مدعوم بالذكاء الاصطناعي" : "AI-Powered"}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-1">
-          {/* WhatsApp Transfer Button */}
           <Button
             variant="ghost"
             size="icon"
@@ -303,11 +399,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
                 }`}
               >
                 {message.type === "image" && message.attachment && (
-                  <img
-                    src={message.attachment}
-                    alt="Uploaded"
-                    className="max-w-full rounded-lg mb-1.5"
-                  />
+                  <img src={message.attachment} alt="Uploaded" className="max-w-full rounded-lg mb-1.5" />
                 )}
                 {message.type === "voice" && (
                   <div className="flex items-center gap-2 mb-1">
@@ -316,16 +408,18 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
                     </div>
                     <div className="flex gap-0.5">
                       {[...Array(12)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="w-0.5 bg-current rounded-full opacity-50"
-                          style={{ height: `${Math.random() * 14 + 4}px` }}
-                        />
+                        <div key={i} className="w-0.5 bg-current rounded-full opacity-50" style={{ height: `${Math.random() * 14 + 4}px` }} />
                       ))}
                     </div>
                   </div>
                 )}
-                {message.content}
+                {message.role === "bot" ? (
+                  <div className="prose prose-sm max-w-none [&>*]:my-0.5 [&_p]:my-0.5 [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0 text-inherit">
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
+                ) : (
+                  message.content
+                )}
               </div>
             </motion.div>
           ))}
@@ -376,66 +470,38 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
           </div>
         )}
 
-        {/* Media buttons row */}
         <div className="flex items-center gap-1 mb-2">
-          <Button
-            type="button" variant="ghost" size="icon"
-            onClick={() => cameraInputRef.current?.click()}
-            className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted"
-            title={isRTL ? "تصوير مباشر" : "Take photo"}
-          >
+          <Button type="button" variant="ghost" size="icon" onClick={() => cameraInputRef.current?.click()} className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted" title={isRTL ? "تصوير مباشر" : "Take photo"}>
             <Camera className="w-4 h-4" />
           </Button>
-          <Button
-            type="button" variant="ghost" size="icon"
-            onClick={() => imageInputRef.current?.click()}
-            className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted"
-            title={isRTL ? "رفع صورة" : "Upload image"}
-          >
+          <Button type="button" variant="ghost" size="icon" onClick={() => imageInputRef.current?.click()} className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted" title={isRTL ? "رفع صورة" : "Upload image"}>
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
               <circle cx="9" cy="9" r="2" />
               <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
             </svg>
           </Button>
-          <Button
-            type="button" variant="ghost" size="icon"
-            onClick={() => fileInputRef.current?.click()}
-            className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted"
-            title={isRTL ? "إرفاق ملف" : "Attach file"}
-          >
+          <Button type="button" variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()} className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted" title={isRTL ? "إرفاق ملف" : "Attach file"}>
             <Paperclip className="w-4 h-4" />
           </Button>
-          <Button
-            type="button" variant="ghost" size="icon"
-            onClick={handleVoiceRecord}
-            className={`h-7 w-7 transition-colors ${
-              isRecording
-                ? "text-destructive bg-destructive/10"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted"
-            }`}
-            title={isRTL ? "تسجيل صوتي" : "Voice note"}
-          >
+          <Button type="button" variant="ghost" size="icon" onClick={handleVoiceRecord} className={`h-7 w-7 transition-colors ${isRecording ? "text-destructive bg-destructive/10" : "text-muted-foreground hover:text-foreground hover:bg-muted"}`} title={isRTL ? "تسجيل صوتي" : "Voice note"}>
             {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </Button>
         </div>
 
-        <form
-          onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
-          className="flex gap-2 items-center"
-        >
+        <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="flex gap-2 items-center">
           <Input
             ref={inputRef}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder={isRTL ? "اكتب رسالتك..." : "Type your message..."}
             className="flex-1 rounded-full bg-muted border-0 h-9 text-sm focus-visible:ring-1 focus-visible:ring-primary/30"
-            disabled={isRecording}
+            disabled={isRecording || isTyping}
           />
           <Button
             type="submit"
             size="icon"
-            disabled={!inputValue.trim() || isRecording}
+            disabled={!inputValue.trim() || isRecording || isTyping}
             className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shrink-0 h-9 w-9"
           >
             <Send className="w-4 h-4" />
