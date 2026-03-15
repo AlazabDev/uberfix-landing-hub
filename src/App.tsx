@@ -38,6 +38,7 @@ const Install = lazy(() => import("./pages/Install"));
 const Portfolio = lazy(() => import("./pages/Portfolio"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const ChatBotSettings = lazy(() => import("./pages/ChatBotSettings"));
+const MaintenanceRequest = lazy(() => import("./pages/MaintenanceRequest"));
 
 const queryClient = new QueryClient();
 
@@ -91,6 +92,7 @@ const App = () => (
               <Route path="/portfolio" element={<LazyPage><Portfolio /></LazyPage>} />
               <Route path="/dashboard" element={<LazyPage><Dashboard /></LazyPage>} />
               <Route path="/chatbot-settings" element={<LazyPage><ChatBotSettings /></LazyPage>} />
+              <Route path="/maintenance-request" element={<LazyPage><MaintenanceRequest /></LazyPage>} />
               <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />
             </Routes>
           </AnimatePresence>

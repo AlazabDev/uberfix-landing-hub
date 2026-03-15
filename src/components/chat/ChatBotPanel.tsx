@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
+import ChatMaintenanceForm from "./ChatMaintenanceForm";
 
 interface Message {
   id: string;
@@ -48,6 +49,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [showMaintenanceForm, setShowMaintenanceForm] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -71,10 +73,12 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   }, []);
 
   const quickActions = isRTL ? [
+    "📋 طلب صيانة جديد",
     "احجز خدمة صيانة",
     "أسعار الخدمات",
     "تتبع طلبي",
   ] : [
+    "📋 New maintenance request",
     "Book a service",
     "Service pricing",
     "Track my order",
@@ -350,8 +354,27 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   };
 
   const handleQuickAction = (action: string) => {
+    if (action.includes("طلب صيانة") || action.includes("maintenance request")) {
+      setShowMaintenanceForm(true);
+      return;
+    }
     setInputValue(action);
     inputRef.current?.focus();
+  };
+
+  const handleMaintenanceSuccess = (requestNumber: string) => {
+    setShowMaintenanceForm(false);
+    const successMsg = requestNumber
+      ? (isRTL ? `✅ تم تسجيل طلب الصيانة بنجاح! رقم الطلب: ${requestNumber}` : `✅ Maintenance request submitted! Request #: ${requestNumber}`)
+      : (isRTL ? "✅ تم تسجيل طلب الصيانة بنجاح!" : "✅ Maintenance request submitted!");
+    const newMsg: Message = {
+      id: Date.now().toString(),
+      content: successMsg,
+      role: "bot",
+      timestamp: new Date(),
+    };
+    setMessages(prev => [...prev, newMsg]);
+    saveMessage("bot", successMsg);
   };
 
   return (
@@ -523,8 +546,14 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
               {isRTL ? `جاري التسجيل... ${recordingTime}ث` : `Recording... ${recordingTime}s`}
             </span>
           </div>
-        )}
+          )}
 
+          {showMaintenanceForm && (
+            <ChatMaintenanceForm
+              onClose={() => setShowMaintenanceForm(false)}
+              onSuccess={handleMaintenanceSuccess}
+            />
+          )}
         <div className="flex items-center gap-1 mb-2">
           <Button type="button" variant="ghost" size="icon" onClick={() => cameraInputRef.current?.click()} className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted" title={isRTL ? "تصوير مباشر" : "Take photo"}>
             <Camera className="w-4 h-4" />
