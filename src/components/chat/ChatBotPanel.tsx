@@ -55,6 +55,23 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const recordingInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const conversationIdRef = useRef<string | null>(null);
+  const sessionIdRef = useRef<string>(
+    () => {
+      const stored = sessionStorage.getItem("uberfix_chat_session");
+      if (stored) return stored;
+      const id = crypto.randomUUID();
+      sessionStorage.setItem("uberfix_chat_session", id);
+      return id;
+    }
+  );
+
+  // Initialize session id
+  useEffect(() => {
+    if (typeof sessionIdRef.current === "function") {
+      sessionIdRef.current = (sessionIdRef.current as any)();
+    }
+  }, []);
 
   const quickActions = isRTL ? [
     "احجز خدمة صيانة",
@@ -65,6 +82,37 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     "Service pricing",
     "Track my order",
   ];
+
+  // Create or get conversation
+  const ensureConversation = useCallback(async () => {
+    if (conversationIdRef.current) return conversationIdRef.current;
+    const { data, error } = await supabase
+      .from("chat_conversations")
+      .insert({ session_id: sessionIdRef.current as string, language: i18n.language })
+      .select("id")
+      .single();
+    if (error) {
+      console.error("Failed to create conversation:", error);
+      return null;
+    }
+    conversationIdRef.current = data.id;
+    return data.id;
+  }, [i18n.language]);
+
+  // Save message to DB
+  const saveMessage = useCallback(async (role: "user" | "bot", content: string, messageType = "text", fileName?: string) => {
+    const convId = await ensureConversation();
+    if (!convId || !content.trim()) return;
+    await supabase.from("chat_messages").insert({
+      conversation_id: convId,
+      role,
+      content,
+      message_type: messageType,
+      file_name: fileName || null,
+    });
+    // Update conversation timestamp
+    await supabase.from("chat_conversations").update({ updated_at: new Date().toISOString() }).eq("id", convId);
+  }, [ensureConversation]);
 
   useEffect(() => {
     if (scrollRef.current) {
