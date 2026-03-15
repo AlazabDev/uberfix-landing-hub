@@ -292,6 +292,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
         };
         const newMessages = [...messages, imgMsg];
         setMessages(newMessages);
+        saveMessage("user", imgMsg.content, "image");
         streamAIResponse(isRTL ? "أرسلت لك صورة، كيف يمكنك مساعدتي؟" : "I sent you an image, how can you help?", newMessages);
       };
       reader.readAsDataURL(file);
