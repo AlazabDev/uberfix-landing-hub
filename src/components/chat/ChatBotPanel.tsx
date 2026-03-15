@@ -11,6 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: string;
@@ -54,6 +55,20 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const recordingInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const conversationIdRef = useRef<string | null>(null);
+  const sessionIdRef = useRef<string>("");
+
+  // Initialize session id
+  useEffect(() => {
+    const stored = sessionStorage.getItem("uberfix_chat_session");
+    if (stored) {
+      sessionIdRef.current = stored;
+    } else {
+      const id = crypto.randomUUID();
+      sessionStorage.setItem("uberfix_chat_session", id);
+      sessionIdRef.current = id;
+    }
+  }, []);
 
   const quickActions = isRTL ? [
     "احجز خدمة صيانة",
@@ -64,6 +79,37 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     "Service pricing",
     "Track my order",
   ];
+
+  // Create or get conversation
+  const ensureConversation = useCallback(async () => {
+    if (conversationIdRef.current) return conversationIdRef.current;
+    const { data, error } = await supabase
+      .from("chat_conversations")
+      .insert({ session_id: sessionIdRef.current as string, language: i18n.language })
+      .select("id")
+      .single();
+    if (error) {
+      console.error("Failed to create conversation:", error);
+      return null;
+    }
+    conversationIdRef.current = data.id;
+    return data.id;
+  }, [i18n.language]);
+
+  // Save message to DB
+  const saveMessage = useCallback(async (role: "user" | "bot", content: string, messageType = "text", fileName?: string) => {
+    const convId = await ensureConversation();
+    if (!convId || !content.trim()) return;
+    await supabase.from("chat_messages").insert({
+      conversation_id: convId,
+      role,
+      content,
+      message_type: messageType,
+      file_name: fileName || null,
+    });
+    // Update conversation timestamp
+    await supabase.from("chat_conversations").update({ updated_at: new Date().toISOString() }).eq("id", convId);
+  }, [ensureConversation]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -193,6 +239,11 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
           } catch { /* ignore */ }
         }
       }
+
+      // Save bot response to DB
+      if (assistantContent.trim()) {
+        saveMessage("bot", assistantContent);
+      }
     } catch (err: any) {
       if (err.name === "AbortError") return;
       setIsTyping(false);
@@ -211,7 +262,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
         variant: "destructive",
       });
     }
-  }, [isRTL, toast]);
+  }, [isRTL, toast, saveMessage]);
 
   const handleSendMessage = () => {
     if (!inputValue.trim()) return;
@@ -225,6 +276,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setInputValue("");
+    saveMessage("user", inputValue, "text");
     streamAIResponse(inputValue, newMessages);
   };
 
@@ -245,6 +297,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
         };
         const newMessages = [...messages, imgMsg];
         setMessages(newMessages);
+        saveMessage("user", imgMsg.content, "image");
         streamAIResponse(isRTL ? "أرسلت لك صورة، كيف يمكنك مساعدتي؟" : "I sent you an image, how can you help?", newMessages);
       };
       reader.readAsDataURL(file);
@@ -259,6 +312,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
       };
       const newMessages = [...messages, fileMsg];
       setMessages(newMessages);
+      saveMessage("user", fileMsg.content, "file", file.name);
       streamAIResponse(isRTL ? `أرسلت ملف بعنوان ${file.name}` : `I sent a file named ${file.name}`, newMessages);
     }
     if (e.target) e.target.value = "";
@@ -281,6 +335,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
       const newMessages = [...messages, voiceMsg];
       setMessages(newMessages);
       setRecordingTime(0);
+      saveMessage("user", voiceMsg.content, "voice");
       streamAIResponse(
         isRTL ? "أرسلت رسالة صوتية، أريد المساعدة في خدمات الصيانة" : "I sent a voice message, I need help with maintenance services",
         newMessages
