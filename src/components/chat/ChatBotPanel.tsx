@@ -546,8 +546,14 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
               {isRTL ? `جاري التسجيل... ${recordingTime}ث` : `Recording... ${recordingTime}s`}
             </span>
           </div>
-        )}
+          )}
 
+          {showMaintenanceForm && (
+            <ChatMaintenanceForm
+              onClose={() => setShowMaintenanceForm(false)}
+              onSuccess={handleMaintenanceSuccess}
+            />
+          )}
         <div className="flex items-center gap-1 mb-2">
           <Button type="button" variant="ghost" size="icon" onClick={() => cameraInputRef.current?.click()} className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-muted" title={isRTL ? "تصوير مباشر" : "Take photo"}>
             <Camera className="w-4 h-4" />
