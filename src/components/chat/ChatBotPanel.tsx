@@ -73,10 +73,12 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   }, []);
 
   const quickActions = isRTL ? [
+    "📋 طلب صيانة جديد",
     "احجز خدمة صيانة",
     "أسعار الخدمات",
     "تتبع طلبي",
   ] : [
+    "📋 New maintenance request",
     "Book a service",
     "Service pricing",
     "Track my order",
