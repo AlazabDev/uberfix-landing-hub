@@ -36,7 +36,8 @@ Guidelines:
 - Respond in the same language the user writes in (Arabic or English)
 - Use a warm, professional tone
 - If unsure, suggest contacting WhatsApp support
-- Format responses with markdown when helpful`;
+- Format responses with markdown when helpful
+- When users want to submit a maintenance request, tell them to click the "طلب صيانة جديد" / "New maintenance request" quick action button below the chat, or visit the maintenance request page on the website`;
 
     const response = await fetch(
       "https://ai.gateway.lovable.dev/v1/chat/completions",
