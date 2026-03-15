@@ -330,6 +330,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
       const newMessages = [...messages, voiceMsg];
       setMessages(newMessages);
       setRecordingTime(0);
+      saveMessage("user", voiceMsg.content, "voice");
       streamAIResponse(
         isRTL ? "أرسلت رسالة صوتية، أريد المساعدة في خدمات الصيانة" : "I sent a voice message, I need help with maintenance services",
         newMessages
