@@ -160,7 +160,7 @@ const QuickMaintenanceMap = () => {
         </div>
 
         <div className="relative rounded-2xl overflow-hidden shadow-elevated border border-border" style={{ height: 600 }}>
-          <div ref={mapContainer} className="absolute inset-0" />
+          <div ref={mapContainer} dir="ltr" className="absolute inset-0" />
 
           {(!mapboxToken || !mapboxToken.startsWith("pk.")) && (
             <div className="absolute inset-0 flex items-center justify-center bg-background/90 backdrop-blur-sm">
