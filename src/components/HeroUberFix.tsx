@@ -173,12 +173,12 @@ const HeroUberFix: React.FC = () => {
 
     const typeWriter = () => {
       if (index < text.length && typingTextRef.current) {
-        typingTextRef.current.innerHTML += text.charAt(index);
+        typingTextRef.current.textContent = (typingTextRef.current.textContent || '') + text.charAt(index);
         index++;
         setTimeout(typeWriter, speed);
       }
     };
-    if (typingTextRef.current) typingTextRef.current.innerHTML = '';
+    if (typingTextRef.current) typingTextRef.current.textContent = '';
     setTimeout(typeWriter, 1000);
   }, [t, i18n.language]);
 
