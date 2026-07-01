@@ -86,35 +86,33 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     "Track my order",
   ];
 
-  // Create or get conversation
+  // Create or get conversation (via SECURITY DEFINER RPC)
   const ensureConversation = useCallback(async () => {
     if (conversationIdRef.current) return conversationIdRef.current;
-    const { data, error } = await supabase
-      .from("chat_conversations")
-      .insert({ session_id: sessionIdRef.current as string, language: i18n.language })
-      .select("id")
-      .single();
+    const { data, error } = await supabase.rpc("create_chat_conversation", {
+      p_session_id: sessionIdRef.current as string,
+      p_language: i18n.language === "en" ? "en" : "ar",
+    });
     if (error) {
       console.error("Failed to create conversation:", error);
       return null;
     }
-    conversationIdRef.current = data.id;
-    return data.id;
+    conversationIdRef.current = data as string;
+    return conversationIdRef.current;
   }, [i18n.language]);
 
-  // Save message to DB
+  // Save message to DB (via SECURITY DEFINER RPC; trigger updates conversation timestamp)
   const saveMessage = useCallback(async (role: "user" | "bot", content: string, messageType = "text", fileName?: string) => {
     const convId = await ensureConversation();
     if (!convId || !content.trim()) return;
-    await supabase.from("chat_messages").insert({
-      conversation_id: convId,
-      role,
-      content,
-      message_type: messageType,
-      file_name: fileName || null,
+    const { error } = await supabase.rpc("insert_chat_message", {
+      p_conversation_id: convId,
+      p_role: role,
+      p_content: content,
+      p_message_type: messageType,
+      p_file_name: fileName || null,
     });
-    // Update conversation timestamp
-    await supabase.from("chat_conversations").update({ updated_at: new Date().toISOString() }).eq("id", convId);
+    if (error) console.error("Failed to save message:", error);
   }, [ensureConversation]);
 
   useEffect(() => {
