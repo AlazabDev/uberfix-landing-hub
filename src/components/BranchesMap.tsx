@@ -24,7 +24,7 @@ interface BranchLocation {
 const BranchesMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const mapboxToken = 'pk.eyJ1IjoiYWRtaW51YmVyZml4IiwiYSI6ImNtaWZsOGx2cTBldDYzaXM5YXV4bWFyc3QifQ.j_p5UoorYTcmJoGt_eEZ3w';
+  const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
   const [branches, setBranches] = useState<BranchLocation[]>([]);
 
   // تحميل بيانات الفروع

@@ -81,7 +81,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_chat_conversation: {
+        Args: { p_language: string; p_session_id: string }
+        Returns: string
+      }
+      insert_chat_message: {
+        Args: {
+          p_content: string
+          p_conversation_id: string
+          p_file_name?: string
+          p_message_type?: string
+          p_role: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
