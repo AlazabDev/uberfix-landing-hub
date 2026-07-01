@@ -12,6 +12,7 @@ import FounderLight from "@/components/FounderLight";
 import TechnicianCTA from "@/components/TechnicianCTA";
 import GlobalMap from "@/components/GlobalMap";
 import CTA from "@/components/CTA";
+import QuickMaintenanceMap from "@/components/QuickMaintenanceMap";
 import TechnicianSignup from "@/components/TechnicianSignup";
 import Footer from "@/components/Footer";
 import FloatingChatButton from "@/components/chat/FloatingChatButton";
@@ -21,6 +22,7 @@ const Index = () => {
     <div className="min-h-screen">
       <Navigation />
       <HeroUberFix />
+      <QuickMaintenanceMap />
       <Statistics />
       <Features />
 
