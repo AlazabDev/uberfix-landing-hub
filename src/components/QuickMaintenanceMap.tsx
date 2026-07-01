@@ -73,54 +73,46 @@ const QuickMaintenanceMap = () => {
     map.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
     map.current.scrollZoom.disable();
 
-    // Branch markers (blue shop pins)
-    BRANCHES.forEach((b) => {
+    // SVG teardrop pin factory (colored bg + icon inside)
+    const buildPin = (color: string, iconSrc: string, size = 52) => {
       const el = document.createElement("div");
       el.style.cssText = `
-        width:44px;height:44px;background-image:url('/icons/icon-b.png');
-        background-size:contain;background-repeat:no-repeat;cursor:pointer;
-        filter:drop-shadow(0 4px 6px rgba(0,0,0,.25));transition:transform .25s ease;
+        position:relative;width:${size}px;height:${size * 1.35}px;cursor:pointer;
+        filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));transition:transform .3s ease;
       `;
-      el.title = b.name;
-      el.addEventListener("mouseenter", () => (el.style.transform = "scale(1.15) translateY(-4px)"));
-      el.addEventListener("mouseleave", () => (el.style.transform = "scale(1) translateY(0)"));
-      new mapboxgl.Marker(el).setLngLat([b.lng, b.lat]).addTo(map.current!);
-    });
-
-    // Technician markers (yellow pin + tech icon)
-    TECHNICIANS.forEach((tech, i) => {
-      const el = document.createElement("div");
-      el.style.cssText = `
-        position:relative;width:48px;height:64px;cursor:pointer;
-        filter:drop-shadow(0 4px 8px rgba(0,0,0,.3));
-        transition:transform .3s ease;
+      el.innerHTML = `
+        <svg viewBox="0 0 40 54" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;">
+          <path d="M20 0C9 0 0 9 0 20c0 14 20 34 20 34s20-20 20-34C40 9 31 0 20 0z" fill="${color}" stroke="#ffffff" stroke-width="2"/>
+          <circle cx="20" cy="20" r="14" fill="#ffffff"/>
+        </svg>
+        <img src="${iconSrc}" style="position:absolute;top:${size * 0.13}px;left:50%;transform:translateX(-50%);width:${size * 0.55}px;height:${size * 0.55}px;object-fit:contain;pointer-events:none;" />
       `;
-
-      const pin = document.createElement("img");
-      pin.src = "/icons/icon-y.png";
-      pin.style.cssText = "position:absolute;inset:0;width:100%;height:100%;";
-      pin.onerror = () => { pin.src = "/icons/uberfix-pin.png"; };
-
-      const avatar = document.createElement("img");
-      avatar.src = tech.icon;
-      avatar.style.cssText = `
-        position:absolute;top:4px;left:50%;transform:translateX(-50%);
-        width:32px;height:32px;object-fit:contain;
-        animation:tech-pulse 2.4s ease-in-out infinite;animation-delay:${i * 0.15}s;
-      `;
-
-      el.appendChild(pin);
-      el.appendChild(avatar);
-
       el.addEventListener("mouseenter", () => (el.style.transform = "scale(1.15) translateY(-6px)"));
       el.addEventListener("mouseleave", () => (el.style.transform = "scale(1) translateY(0)"));
+      return el;
+    };
+
+    // Branch markers (blue pins)
+    BRANCHES.forEach((b) => {
+      const el = buildPin("#1e3a8a", "/icons/branch-icon.png", 44);
+      el.title = b.name;
+      new mapboxgl.Marker({ element: el, anchor: "bottom" }).setLngLat([b.lng, b.lat]).addTo(map.current!);
+    });
+
+    // Technician markers (yellow pins with tech icon)
+    TECHNICIANS.forEach((tech, i) => {
+      const el = buildPin("#f5b210", tech.icon, 52);
+      const avatar = el.querySelector("img") as HTMLImageElement;
+      if (avatar) {
+        avatar.style.animation = `tech-pulse 2.4s ease-in-out infinite`;
+        avatar.style.animationDelay = `${i * 0.15}s`;
+      }
       el.addEventListener("click", (e) => {
         e.stopPropagation();
         setSelected(tech);
         map.current?.flyTo({ center: [tech.lng, tech.lat], zoom: 13, duration: 900 });
       });
-
-      new mapboxgl.Marker(el).setLngLat([tech.lng, tech.lat]).addTo(map.current!);
+      new mapboxgl.Marker({ element: el, anchor: "bottom" }).setLngLat([tech.lng, tech.lat]).addTo(map.current!);
     });
 
     // Close card on map click
@@ -168,7 +160,7 @@ const QuickMaintenanceMap = () => {
         </div>
 
         <div className="relative rounded-2xl overflow-hidden shadow-elevated border border-border" style={{ height: 600 }}>
-          <div ref={mapContainer} className="absolute inset-0" />
+          <div ref={mapContainer} dir="ltr" className="absolute inset-0" />
 
           {(!mapboxToken || !mapboxToken.startsWith("pk.")) && (
             <div className="absolute inset-0 flex items-center justify-center bg-background/90 backdrop-blur-sm">
