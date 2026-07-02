@@ -10,13 +10,13 @@ interface SEOHeadProps {
 
 const defaultSEO = {
   title: 'UberFix - نظام إدارة الصيانة | شركة العزب المعمارية',
-  description: 'منصة شاملة لإدارة طلبات الصيانة وربط العملاء بالفنيين المحترفين. أكثر من 500 فني و5000 طلب صيانة في مصر.',
+  description: 'منصة شاملة لإدارة طلبات الصيانة وربط العملاء بالفنيين المحترفين. لادارة طلبات الصيانات.',
   image: 'https://uberfix.shop/upload/uber-hero.jpg',
   type: 'website',
 };
 
 const pageSEO: Record<string, { title: string; description: string }> = {
-  '/': { title: 'UberFix - نظام إدارة الصيانة الذكي', description: 'منصة UberFix لإدارة الصيانة الذكية - أكثر من 500 فني محترف و5000 طلب صيانة في مصر' },
+  '/': { title: 'UberFix - نظام إدارة الصيانة الذكي', description: 'منصة شاملة لإدارة طلبات الصيانة وربط العملاء بالفنيين المحترفين. لادارة طلبات الصيانات' },
   '/services': { title: 'خدماتنا | UberFix', description: 'خدمات صيانة شاملة تشمل التشطيبات الفاخرة والهوية التجارية وصيانة المباني والمنشآت' },
   '/projects': { title: 'مشاريعنا | UberFix', description: 'استعرض مشاريع الصيانة والتشطيبات المنفذة بأعلى معايير الجودة' },
   '/about': { title: 'عن الشركة | UberFix', description: 'تعرف على شركة العزب المعمارية وفريق UberFix المتخصص في إدارة الصيانة' },
@@ -81,8 +81,8 @@ const SEOHead = ({ title, description, image, type }: SEOHeadProps) => {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'UberFix - شركة العزب المعمارية',
-      url: 'https://uberfix.shop',
-      logo: 'https://uberfix.shop/icons/app-icon-512.png',
+      url: 'https://uberfix.alazab.com',
+      logo: 'https://uberfix.alazab.com/icon-512-maskable.png',
       description: seo.description,
       address: { '@type': 'PostalAddress', addressCountry: 'EG' },
       sameAs: [],
@@ -93,7 +93,7 @@ const SEOHead = ({ title, description, image, type }: SEOHeadProps) => {
       name: seo.title,
       description: seo.description,
       url: `https://uberfix.shop${location.pathname}`,
-      isPartOf: { '@type': 'WebSite', name: 'UberFix', url: 'https://uberfix.shop' },
+      isPartOf: { '@type': 'WebSite', name: 'UberFix', url: 'https://uberfix.alazab.com' },
     };
     
     script.textContent = JSON.stringify(jsonLd);
