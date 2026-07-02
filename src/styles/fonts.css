@@ -239,6 +239,13 @@ html[lang="ar"] select {
     font-family: var(--font-brand) !important;
 }
 
+/* UberFix wordmark — Jozoor font wherever the brand name appears */
+.brand-uberfix,
+.brand-uberfix * {
+    font-family: "AzabEnglishHeading", "Jozoor", serif !important;
+    letter-spacing: 0.02em;
+}
+
 /* ========= Safe fallback for mixed text ========= */
 
 .mixed-content,
