@@ -90,7 +90,7 @@ const Navigation = () => {
               className="w-10 h-10 rounded-lg bg-transparent"
               style={{ background: 'transparent' }}
             />
-            <div className="text-2xl font-bold text-white">
+            <div className="brand-uberfix text-2xl font-bold text-white">
               <span className="text-secondary">Uber</span>Fix
             </div>
           </Link>
