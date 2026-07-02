@@ -26,14 +26,14 @@ interface Branch {
 
 // Cairo-centered demo data (representative of the reference screenshot)
 const TECHNICIANS: Technician[] = [
-  { id: "t1", name: "أحمد حسين", profession: "فني سباك", rating: 5, status: "available", statusText: "متاح بعد 40 دقيقة", lat: 30.058, lng: 31.32, icon: "/icons/tec-19.png" },
-  { id: "t2", name: "محمود سعد", profession: "أسطى نجار", rating: 5, status: "busy", statusText: "مشغول اليوم", lat: 30.024, lng: 31.235, icon: "/icons/tec-20.png" },
-  { id: "t3", name: "خالد إبراهيم", profession: "فني كهرباء", rating: 5, status: "available", statusText: "متاح الآن", lat: 30.09, lng: 31.21, icon: "/icons/tec-21.png" },
-  { id: "t4", name: "علي محمد", profession: "فني تكييف", rating: 4, status: "available", statusText: "متاح بعد 20 دقيقة", lat: 30.045, lng: 31.19, icon: "/icons/tec-22.png" },
-  { id: "t5", name: "طارق فؤاد", profession: "أسطى دهانات", rating: 5, status: "busy", statusText: "مشغول - غداً متاح", lat: 30.075, lng: 31.28, icon: "/icons/tec-23.png" },
-  { id: "t6", name: "عمرو ناصر", profession: "فني محارة", rating: 4, status: "available", statusText: "متاح بعد ساعة", lat: 30.005, lng: 31.27, icon: "/icons/tec-24.png" },
-  { id: "t7", name: "حسن الجندي", profession: "فني سيراميك", rating: 5, status: "available", statusText: "متاح الآن", lat: 30.11, lng: 31.34, icon: "/icons/tec-15.png" },
-  { id: "t8", name: "إسلام رمضان", profession: "فني ألوميتال", rating: 4, status: "busy", statusText: "مشغول اليوم", lat: 30.03, lng: 31.36, icon: "/icons/tec-16.png" },
+  { id: "t1", name: "أحمد حسين", profession: "فني سباك", rating: 5, status: "available", statusText: "متاح بعد 40 دقيقة", lat: 30.058, lng: 31.32, icon: "/icons/tec/tec-07.png" },
+  { id: "t2", name: "محمود سعد", profession: "أسطى نجار", rating: 5, status: "busy", statusText: "مشغول اليوم", lat: 30.024, lng: 31.235, icon: "/icons/tec/tec-11.png" },
+  { id: "t3", name: "خالد إبراهيم", profession: "فني كهرباء", rating: 5, status: "available", statusText: "متاح الآن", lat: 30.09, lng: 31.21, icon: "/icons/tec/tec-12.png" },
+  { id: "t4", name: "علي محمد", profession: "فني تكييف", rating: 4, status: "available", statusText: "متاح بعد 20 دقيقة", lat: 30.045, lng: 31.19, icon: "/icons/tec/tec-18.png" },
+  { id: "t5", name: "طارق فؤاد", profession: "أسطى دهانات", rating: 5, status: "busy", statusText: "مشغول - غداً متاح", lat: 30.075, lng: 31.28, icon: "/icons/tec/tec-48.png" },
+  { id: "t6", name: "عمرو ناصر", profession: "فني محارة", rating: 4, status: "available", statusText: "متاح بعد ساعة", lat: 30.005, lng: 31.27, icon: "/icons/tec/tec-07.png" },
+  { id: "t7", name: "حسن الجندي", profession: "فني سيراميك", rating: 5, status: "available", statusText: "متاح الآن", lat: 30.11, lng: 31.34, icon: "/icons/tec/tec-11.png" },
+  { id: "t8", name: "إسلام رمضان", profession: "فني ألوميتال", rating: 4, status: "busy", statusText: "مشغول اليوم", lat: 30.03, lng: 31.36, icon: "/icons/tec/tec-12.png" },
 ];
 
 const BRANCHES: Branch[] = [
