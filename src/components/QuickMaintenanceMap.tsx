@@ -73,40 +73,27 @@ const QuickMaintenanceMap = () => {
     map.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
     map.current.scrollZoom.disable();
 
-    // SVG teardrop pin factory (colored bg + icon inside)
-    const buildPin = (color: string, iconSrc: string, size = 52) => {
+    // Plain image marker factory (no frame, no hover effects)
+    const buildIcon = (iconSrc: string, size = 56) => {
       const el = document.createElement("div");
-      el.style.cssText = `
-        position:relative;width:${size}px;height:${size * 1.35}px;cursor:pointer;
-        filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));transition:transform .3s ease;
-      `;
-      el.innerHTML = `
-        <svg viewBox="0 0 40 54" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;">
-          <path d="M20 0C9 0 0 9 0 20c0 14 20 34 20 34s20-20 20-34C40 9 31 0 20 0z" fill="${color}" stroke="#ffffff" stroke-width="2"/>
-          <circle cx="20" cy="20" r="14" fill="#ffffff"/>
-        </svg>
-        <img src="${iconSrc}" style="position:absolute;top:${size * 0.13}px;left:50%;transform:translateX(-50%);width:${size * 0.55}px;height:${size * 0.55}px;object-fit:contain;pointer-events:none;" />
-      `;
-      el.addEventListener("mouseenter", () => (el.style.transform = "scale(1.15) translateY(-6px)"));
-      el.addEventListener("mouseleave", () => (el.style.transform = "scale(1) translateY(0)"));
+      el.style.cssText = `width:${size}px;height:${size}px;cursor:pointer;`;
+      const img = document.createElement("img");
+      img.src = iconSrc;
+      img.style.cssText = `width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;`;
+      el.appendChild(img);
       return el;
     };
 
-    // Branch markers (blue pins)
+    // Branch markers
     BRANCHES.forEach((b) => {
-      const el = buildPin("#1e3a8a", "/icons/branch-icon.png", 44);
+      const el = buildIcon("/icons/branch-icon.png", 44);
       el.title = b.name;
       new mapboxgl.Marker({ element: el, anchor: "bottom" }).setLngLat([b.lng, b.lat]).addTo(map.current!);
     });
 
-    // Technician markers (yellow pins with tech icon)
-    TECHNICIANS.forEach((tech, i) => {
-      const el = buildPin("#f5b210", tech.icon, 52);
-      const avatar = el.querySelector("img") as HTMLImageElement;
-      if (avatar) {
-        avatar.style.animation = `tech-pulse 2.4s ease-in-out infinite`;
-        avatar.style.animationDelay = `${i * 0.15}s`;
-      }
+    // Technician markers
+    TECHNICIANS.forEach((tech) => {
+      const el = buildIcon(tech.icon, 60);
       el.addEventListener("click", (e) => {
         e.stopPropagation();
         setSelected(tech);
@@ -117,19 +104,6 @@ const QuickMaintenanceMap = () => {
 
     // Close card on map click
     map.current.on("click", () => setSelected(null));
-
-    // Inject keyframes once
-    if (!document.getElementById("tech-pulse-keyframes")) {
-      const style = document.createElement("style");
-      style.id = "tech-pulse-keyframes";
-      style.textContent = `
-        @keyframes tech-pulse {
-          0%,100% { transform: translateX(-50%) scale(1); opacity: 1; }
-          50% { transform: translateX(-50%) scale(1.08); opacity: .85; }
-        }
-      `;
-      document.head.appendChild(style);
-    }
 
     return () => {
       map.current?.remove();
