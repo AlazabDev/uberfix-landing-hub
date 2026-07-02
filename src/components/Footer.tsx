@@ -39,7 +39,7 @@ const Footer = () => {
                 className="w-12 h-12 rounded-xl bg-transparent"
                 style={{ background: 'transparent' }}
               />
-              <span className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+              <span className="brand-uberfix text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                 UberFix
               </span>
             </div>
