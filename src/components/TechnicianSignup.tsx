@@ -54,7 +54,7 @@ const TechnicianSignup = () => {
             size="lg"
             className="bg-secondary text-secondary-foreground hover:bg-secondary/90 gap-2 text-lg px-8"
           >
-            <a href="https://uberfix.shop/technicians/registration" target="_blank" rel="noopener noreferrer">
+            <a href="https://uberfix.shop/technicians/registration/wizard" target="_blank" rel="noopener noreferrer">
               {t("techSignup.cta", "سجّل كفني الآن")}
               {isRTL ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
             </a>
