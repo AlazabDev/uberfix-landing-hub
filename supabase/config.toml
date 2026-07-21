@@ -5,3 +5,24 @@ verify_jwt = false
 
 [functions.maintenance-request]
 verify_jwt = false
+
+[functions.technician-report-submit]
+verify_jwt = false
+
+[functions.technician-report-confirm]
+verify_jwt = false
+
+[functions.branch-approval-view]
+verify_jwt = false
+
+[functions.branch-approval-decide]
+verify_jwt = false
+
+[functions.branches-public]
+verify_jwt = false
+
+[functions.list-voice-reports]
+verify_jwt = false
+
+[functions.resend-branch-approval]
+verify_jwt = false
