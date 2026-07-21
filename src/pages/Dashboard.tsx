@@ -52,6 +52,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
+import VoiceReportsTab from "@/components/dashboard/VoiceReportsTab";
 import { Settings } from "lucide-react";
 import {
   Dialog,
@@ -226,7 +227,7 @@ const Dashboard = () => {
       
       <main className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8 flex items-start justify-between">
+        <div className="mb-8 flex items-start justify-between flex-wrap gap-3">
           <div>
             <h1 className="text-3xl font-bold text-foreground mb-2">
               {isRTL ? "لوحة تحكم التذاكر" : "Tickets Dashboard"}
@@ -235,13 +236,37 @@ const Dashboard = () => {
               {isRTL ? "إدارة ومتابعة طلبات الدعم والصيانة" : "Manage and track support and maintenance requests"}
             </p>
           </div>
-          <Link to="/chatbot-settings">
-            <Button variant="outline" className="gap-2">
-              <Settings className="w-4 h-4" />
-              {isRTL ? "إعدادات الشات بوت" : "Chatbot Settings"}
-            </Button>
-          </Link>
+          <div className="flex gap-2 flex-wrap">
+            <Link to="/technician-report">
+              <Button variant="default" className="gap-2">
+                <Mic className="w-4 h-4" />
+                {isRTL ? "تقرير فني جديد" : "New Technician Report"}
+              </Button>
+            </Link>
+            <Link to="/chatbot-settings">
+              <Button variant="outline" className="gap-2">
+                <Settings className="w-4 h-4" />
+                {isRTL ? "إعدادات الشات بوت" : "Chatbot Settings"}
+              </Button>
+            </Link>
+          </div>
         </div>
+
+        <Tabs defaultValue="voice_reports" className="mb-8">
+          <TabsList>
+            <TabsTrigger value="voice_reports">{isRTL ? "الاعتمادات الصوتية" : "Voice Approvals"}</TabsTrigger>
+            <TabsTrigger value="legacy">{isRTL ? "تذاكر (بيانات تجريبية)" : "Tickets (Demo Data)"}</TabsTrigger>
+          </TabsList>
+          <TabsContent value="voice_reports" className="mt-4">
+            <VoiceReportsTab />
+          </TabsContent>
+          <TabsContent value="legacy" className="mt-4">
+            <div className="mb-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm">
+              {isRTL ? "⚠️ هذه بيانات تجريبية ثابتة (mock) للعرض فقط." : "⚠️ This is static demo data for preview only."}
+            </div>
+          </TabsContent>
+        </Tabs>
+
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
