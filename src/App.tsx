@@ -95,6 +95,8 @@ const App = () => (
               <Route path="/dashboard" element={<LazyPage><Dashboard /></LazyPage>} />
               <Route path="/chatbot-settings" element={<LazyPage><ChatBotSettings /></LazyPage>} />
               <Route path="/maintenance-request" element={<LazyPage><MaintenanceRequest /></LazyPage>} />
+              <Route path="/technician-report" element={<LazyPage><TechnicianReport /></LazyPage>} />
+              <Route path="/branch-approval/:token" element={<LazyPage><BranchApproval /></LazyPage>} />
               <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />
             </Routes>
           </AnimatePresence>
