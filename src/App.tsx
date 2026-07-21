@@ -39,6 +39,8 @@ const Portfolio = lazy(() => import("./pages/Portfolio"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const ChatBotSettings = lazy(() => import("./pages/ChatBotSettings"));
 const MaintenanceRequest = lazy(() => import("./pages/MaintenanceRequest"));
+const TechnicianReport = lazy(() => import("./pages/TechnicianReport"));
+const BranchApproval = lazy(() => import("./pages/BranchApproval"));
 
 const queryClient = new QueryClient();
 
