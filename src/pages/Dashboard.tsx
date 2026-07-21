@@ -52,6 +52,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
+import VoiceReportsTab from "@/components/dashboard/VoiceReportsTab";
 import { Settings } from "lucide-react";
 import {
   Dialog,
