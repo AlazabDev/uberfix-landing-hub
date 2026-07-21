@@ -14,6 +14,127 @@ export type Database = {
   }
   public: {
     Tables: {
+      branch_approval_decisions: {
+        Row: {
+          approval_request_id: string
+          approver_email: string
+          approver_name: string
+          content_hash_at_decision: string
+          decided_at: string
+          decision: Database["public"]["Enums"]["branch_decision"]
+          email_match: Database["public"]["Enums"]["email_match_result"]
+          id: string
+          ip: string | null
+          notes: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          approval_request_id: string
+          approver_email: string
+          approver_name: string
+          content_hash_at_decision: string
+          decided_at?: string
+          decision: Database["public"]["Enums"]["branch_decision"]
+          email_match?: Database["public"]["Enums"]["email_match_result"]
+          id?: string
+          ip?: string | null
+          notes?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          approval_request_id?: string
+          approver_email?: string
+          approver_name?: string
+          content_hash_at_decision?: string
+          decided_at?: string
+          decision?: Database["public"]["Enums"]["branch_decision"]
+          email_match?: Database["public"]["Enums"]["email_match_result"]
+          id?: string
+          ip?: string | null
+          notes?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "branch_approval_decisions_approval_request_id_fkey"
+            columns: ["approval_request_id"]
+            isOneToOne: false
+            referencedRelation: "branch_approval_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      branch_approval_requests: {
+        Row: {
+          created_at: string
+          email_delivery_status: Database["public"]["Enums"]["email_delivery_status"]
+          email_error: string | null
+          email_sent_at: string | null
+          expires_at: string
+          id: string
+          report_id: string
+          token_hash: string
+          used_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          email_delivery_status?: Database["public"]["Enums"]["email_delivery_status"]
+          email_error?: string | null
+          email_sent_at?: string | null
+          expires_at: string
+          id?: string
+          report_id: string
+          token_hash: string
+          used_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          email_delivery_status?: Database["public"]["Enums"]["email_delivery_status"]
+          email_error?: string | null
+          email_sent_at?: string | null
+          expires_at?: string
+          id?: string
+          report_id?: string
+          token_hash?: string
+          used_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "branch_approval_requests_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "maintenance_voice_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      branches: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          official_email: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          official_email?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          official_email?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       chat_conversations: {
         Row: {
           id: string
@@ -76,6 +197,147 @@ export type Database = {
           },
         ]
       }
+      maintenance_audit_events: {
+        Row: {
+          actor: string | null
+          created_at: string
+          event_type: string
+          id: string
+          payload: Json | null
+          report_id: string
+        }
+        Insert: {
+          actor?: string | null
+          created_at?: string
+          event_type: string
+          id?: string
+          payload?: Json | null
+          report_id: string
+        }
+        Update: {
+          actor?: string | null
+          created_at?: string
+          event_type?: string
+          id?: string
+          payload?: Json | null
+          report_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_audit_events_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "maintenance_voice_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maintenance_report_media: {
+        Row: {
+          created_at: string
+          id: string
+          kind: Database["public"]["Enums"]["report_media_kind"]
+          mime: string | null
+          report_id: string
+          size_bytes: number | null
+          storage_path: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: Database["public"]["Enums"]["report_media_kind"]
+          mime?: string | null
+          report_id: string
+          size_bytes?: number | null
+          storage_path: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["report_media_kind"]
+          mime?: string | null
+          report_id?: string
+          size_bytes?: number | null
+          storage_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_report_media_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "maintenance_voice_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maintenance_voice_reports: {
+        Row: {
+          audio_duration_sec: number | null
+          audio_path: string | null
+          branch_id: string | null
+          content_hash: string | null
+          created_at: string
+          id: string
+          location_lat: number | null
+          location_lng: number | null
+          manual_summary: string | null
+          request_number: string
+          status: Database["public"]["Enums"]["voice_report_status"]
+          structured_data: Json | null
+          technician_confirmed_at: string | null
+          technician_name: string
+          technician_phone: string
+          transcript_raw: string | null
+          updated_at: string
+        }
+        Insert: {
+          audio_duration_sec?: number | null
+          audio_path?: string | null
+          branch_id?: string | null
+          content_hash?: string | null
+          created_at?: string
+          id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          manual_summary?: string | null
+          request_number: string
+          status?: Database["public"]["Enums"]["voice_report_status"]
+          structured_data?: Json | null
+          technician_confirmed_at?: string | null
+          technician_name: string
+          technician_phone: string
+          transcript_raw?: string | null
+          updated_at?: string
+        }
+        Update: {
+          audio_duration_sec?: number | null
+          audio_path?: string | null
+          branch_id?: string | null
+          content_hash?: string | null
+          created_at?: string
+          id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          manual_summary?: string | null
+          request_number?: string
+          status?: Database["public"]["Enums"]["voice_report_status"]
+          structured_data?: Json | null
+          technician_confirmed_at?: string | null
+          technician_name?: string
+          technician_phone?: string
+          transcript_raw?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_voice_reports_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -97,7 +359,25 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      branch_decision: "approved" | "approved_with_notes" | "rejected"
+      email_delivery_status:
+        | "pending"
+        | "sent"
+        | "failed"
+        | "configuration_required"
+      email_match_result: "matched" | "mismatched" | "unknown"
+      report_media_kind: "audio" | "before" | "after" | "location"
+      voice_report_status:
+        | "voice_report_received"
+        | "transcription_pending"
+        | "transcription_ready"
+        | "technician_confirmed"
+        | "awaiting_branch_approval"
+        | "approved"
+        | "approved_with_notes"
+        | "rejected"
+        | "expired"
+        | "superseded"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -224,6 +504,28 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      branch_decision: ["approved", "approved_with_notes", "rejected"],
+      email_delivery_status: [
+        "pending",
+        "sent",
+        "failed",
+        "configuration_required",
+      ],
+      email_match_result: ["matched", "mismatched", "unknown"],
+      report_media_kind: ["audio", "before", "after", "location"],
+      voice_report_status: [
+        "voice_report_received",
+        "transcription_pending",
+        "transcription_ready",
+        "technician_confirmed",
+        "awaiting_branch_approval",
+        "approved",
+        "approved_with_notes",
+        "rejected",
+        "expired",
+        "superseded",
+      ],
+    },
   },
 } as const
