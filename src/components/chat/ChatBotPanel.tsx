@@ -9,9 +9,26 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
-import { supabase } from "@/integrations/supabase/client";
 import ChatMaintenanceForm from "./ChatMaintenanceForm";
 import ChatTrackingForm from "./ChatTrackingForm";
+
+interface SpeechRecognitionEventLike {
+  resultIndex: number;
+  results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }>;
+}
+
+interface SpeechRecognitionLike {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  start: () => void;
+  stop: () => void;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onerror: (() => void) | null;
+  onend: (() => void) | null;
+}
+
+type SpeechRecognitionCtor = new () => SpeechRecognitionLike;
 
 interface Message {
   id: string;
@@ -28,7 +45,7 @@ interface ChatBotPanelProps {
 }
 
 const WHATSAPP_NUMBER = "201028291995";
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/foundry-chat`;
 
 const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const { i18n } = useTranslation();
@@ -41,6 +58,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [liveTranscript, setLiveTranscript] = useState("");
   const [showMaintenanceForm, setShowMaintenanceForm] = useState(false);
   const [showTrackingForm, setShowTrackingForm] = useState(false);
 
@@ -50,6 +68,8 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const recordingInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const speakRef = useRef<((text: string) => void) | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const conversationIdRef = useRef<string | null>(null);
   const sessionIdRef = useRef<string>("");
@@ -68,29 +88,11 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     ? ["ما هي خدمات الشركة؟", "أريد عرض سعر تشطيب", "ما هي أسعار التشطيبات؟", "ما هي فروع الشركة؟"]
     : ["What services do you offer?", "Get a finishing quote", "Finishing prices?", "Where are your branches?"];
 
-  const ensureConversation = useCallback(async () => {
-    if (conversationIdRef.current) return conversationIdRef.current;
-    const { data, error } = await supabase.rpc("create_chat_conversation", {
-      p_session_id: sessionIdRef.current,
-      p_language: i18n.language === "en" ? "en" : "ar",
-    });
-    if (error) { console.error(error); return null; }
-    conversationIdRef.current = data as string;
-    return conversationIdRef.current;
-  }, [i18n.language]);
-
-  const saveMessage = useCallback(async (role: "user" | "bot", content: string, messageType = "text", fileName?: string) => {
-    const convId = await ensureConversation();
-    if (!convId || !content.trim()) return;
-    const { error } = await supabase.rpc("insert_chat_message", {
-      p_conversation_id: convId,
-      p_role: role,
-      p_content: content,
-      p_message_type: messageType,
-      p_file_name: fileName || null,
-    });
-    if (error) console.error(error);
-  }, [ensureConversation]);
+  // Public chat: no authentication and no server-side conversation storage.
+  // History lives only in this component's state for the current session.
+  const saveMessage = useCallback((_role: "user" | "bot", _content: string, _type?: string, _fileName?: string) => {
+    /* intentionally not persisted */
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -99,6 +101,8 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   useEffect(() => () => {
     if (recordingInterval.current) clearInterval(recordingInterval.current);
     if (abortRef.current) abortRef.current.abort();
+    try { recognitionRef.current?.stop(); } catch { /* ignore */ }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
   }, []);
 
   const transferToWhatsApp = useCallback(() => {
@@ -108,7 +112,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
   }, [messages, isRTL]);
 
-  const streamAIResponse = useCallback(async (allMessages: Message[]) => {
+  const streamAIResponse = useCallback(async (allMessages: Message[], opts?: { speakReply?: boolean }) => {
     setIsTyping(true);
     const history = allMessages.slice(-10).map(m => ({
       role: m.role === "bot" ? ("assistant" as const) : ("user" as const),
@@ -152,6 +156,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
           if (j === "[DONE]") { done = true; break; }
           try {
             const parsed = JSON.parse(j);
+            if (parsed.error) throw new Error(String(parsed.error));
             const c = parsed.choices?.[0]?.delta?.content as string | undefined;
             if (c) {
               assistantContent += c;
@@ -161,7 +166,10 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
           } catch { textBuffer = line + "\n" + textBuffer; break; }
         }
       }
-      if (assistantContent.trim()) saveMessage("bot", assistantContent);
+      if (assistantContent.trim()) {
+        saveMessage("bot", assistantContent);
+        if (opts?.speakReply) speakRef.current?.(assistantContent);
+      }
     } catch (error: unknown) {
       if (error instanceof DOMException && error.name === "AbortError") return;
       setIsTyping(false);
@@ -222,27 +230,100 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     if (e.target) e.target.value = "";
   };
 
+  // --- Real voice chat: browser speech recognition in, speech synthesis out ---
+  const speak = useCallback((text: string) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    const clean = text.replace(/[*_#`>[\]()]/g, "").slice(0, 600);
+    if (!clean.trim()) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(clean);
+    u.lang = isRTL ? "ar-EG" : "en-US";
+    window.speechSynthesis.speak(u);
+  }, [isRTL]);
+
+  useEffect(() => { speakRef.current = speak; }, [speak]);
+
+  const sendVoiceText = useCallback((text: string) => {
+    const msg: Message = {
+      id: Date.now().toString(),
+      content: text,
+      role: "user",
+      timestamp: new Date(),
+      type: "voice",
+    };
+    const next = [...messages, msg];
+    setMessages(next);
+    streamAIResponse(next, { speakReply: true });
+  }, [messages, streamAIResponse]);
+
+  const stopRecognition = useCallback(() => {
+    setIsRecording(false);
+    if (recordingInterval.current) clearInterval(recordingInterval.current);
+    recordingInterval.current = null;
+    setRecordingTime(0);
+    try { recognitionRef.current?.stop(); } catch { /* ignore */ }
+  }, []);
+
   const handleVoice = () => {
-    if (isRecording) {
+    if (isRecording) { stopRecognition(); return; }
+
+    const SR =
+      (window as unknown as { SpeechRecognition?: SpeechRecognitionCtor; webkitSpeechRecognition?: SpeechRecognitionCtor })
+        .SpeechRecognition ??
+      (window as unknown as { webkitSpeechRecognition?: SpeechRecognitionCtor }).webkitSpeechRecognition;
+
+    if (!SR) {
+      toast({
+        title: isRTL ? "الصوت غير مدعوم" : "Voice unsupported",
+        description: isRTL
+          ? "متصفحك لا يدعم التعرف على الصوت. استخدم Chrome أو اكتب رسالتك."
+          : "This browser does not support speech recognition. Use Chrome or type instead.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const recognition = new SR();
+    recognition.lang = isRTL ? "ar-EG" : "en-US";
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognitionRef.current = recognition;
+
+    let finalText = "";
+    recognition.onresult = (event: SpeechRecognitionEventLike) => {
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const res = event.results[i];
+        if (res.isFinal) finalText += res[0].transcript;
+        else interim += res[0].transcript;
+      }
+      setLiveTranscript(finalText + interim);
+    };
+    recognition.onerror = () => {
+      stopRecognition();
+      toast({
+        title: isRTL ? "خطأ في التسجيل" : "Recording error",
+        description: isRTL ? "تعذر الوصول للميكروفون." : "Could not access the microphone.",
+        variant: "destructive",
+      });
+    };
+    recognition.onend = () => {
       setIsRecording(false);
       if (recordingInterval.current) clearInterval(recordingInterval.current);
-      const msg: Message = {
-        id: Date.now().toString(),
-        content: isRTL ? `🎙️ رسالة صوتية (${recordingTime}ث)` : `🎙️ Voice message (${recordingTime}s)`,
-        role: "user", timestamp: new Date(), type: "voice",
-      };
-      const next = [...messages, msg];
-      setMessages(next);
+      recordingInterval.current = null;
       setRecordingTime(0);
-      saveMessage("user", msg.content, "voice");
-      streamAIResponse(next);
-      setTab("text");
-    } else {
-      setIsRecording(true);
-      setRecordingTime(0);
-      recordingInterval.current = setInterval(() => setRecordingTime(p => p + 1), 1000);
-    }
+      const text = finalText.trim();
+      setLiveTranscript("");
+      if (text) sendVoiceText(text);
+    };
+
+    setLiveTranscript("");
+    setIsRecording(true);
+    setRecordingTime(0);
+    recordingInterval.current = setInterval(() => setRecordingTime(p => p + 1), 1000);
+    recognition.start();
   };
+
 
   const showWelcome = messages.length === 0 && !showMaintenanceForm && !showTrackingForm;
 
@@ -469,8 +550,13 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
                 : (isRTL ? "اضغط للتحدث مع عزبوت" : "Tap to speak with AzaBot")}
             </p>
             <p className="text-muted-foreground text-xs mt-1">
-              {isRTL ? "سيتم إرسال التسجيل بعد الإيقاف" : "Recording will be sent on stop"}
+              {isRTL ? "يتم تحويل كلامك لنص وإرساله للوكيل، والرد يُقرأ صوتياً" : "Your speech is transcribed, sent to the agent, and the reply is read aloud"}
             </p>
+            {liveTranscript && (
+              <p className="mt-3 text-sm text-foreground bg-muted rounded-xl px-3 py-2 max-w-[280px] mx-auto">
+                {liveTranscript}
+              </p>
+            )}
           </div>
           <button onClick={() => setTab("text")} className="text-xs text-muted-foreground hover:text-foreground underline">
             {isRTL ? "العودة للمحادثة النصية" : "Back to text chat"}
