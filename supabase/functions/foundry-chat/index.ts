@@ -40,43 +40,14 @@ interface IncomingMessage {
   content: string;
 }
 
-const AGENT_NAME = Deno.env.get("FOUNDRY_AGENT_NAME") ?? "az-agent-maint";
-const AGENT_VERSION = Deno.env.get("FOUNDRY_AGENT_VERSION") ?? "21";
 const RESPONSES_ENDPOINT =
   Deno.env.get("FOUNDRY_RESPONSES_ENDPOINT") ??
   "https://az-ai-resource.services.ai.azure.com/api/projects/az-ai-gateway/agents/az-agent-maint/endpoint/protocols/openai/responses";
-const API_VERSION = Deno.env.get("FOUNDRY_API_VERSION") ?? "2026-04-10";
+// The endpoint-scoped Foundry Responses protocol accepts api-version=v1.
+const API_VERSION = Deno.env.get("FOUNDRY_API_VERSION") ?? "v1";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
-
-  // Temporary diagnostic: probe which api-version the Foundry endpoint accepts.
-  if (req.method === "GET" && new URL(req.url).searchParams.get("probe") === "1") {
-    const apiKey = Deno.env.get("AZURE_AI_API_KEY");
-    if (!apiKey) return jsonError("AZURE_AI_API_KEY is not configured", 500);
-    const candidates = ["", "v1", "2026-04-10", "2025-11-15-preview", "2025-04-01-preview", "preview", "2024-12-01-preview"];
-    const results: Record<string, string> = {};
-    for (const v of candidates) {
-      const u = v ? `${RESPONSES_ENDPOINT}?api-version=${v}` : RESPONSES_ENDPOINT;
-      try {
-        const r = await fetch(u, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "api-key": apiKey },
-          body: JSON.stringify({
-            input: [{ type: "message", role: "user", content: [{ type: "input_text", text: "hi" }] }],
-            store: false,
-            agent: { name: AGENT_NAME, version: AGENT_VERSION, type: "agent_reference" },
-          }),
-        });
-        results[v || "(none)"] = `${r.status} ${(await r.text()).slice(0, 300)}`;
-      } catch (e) {
-        results[v || "(none)"] = `fetch-error ${e instanceof Error ? e.message : ""}`;
-      }
-    }
-    return new Response(JSON.stringify(results, null, 2), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
 
   if (req.method !== "POST") return jsonError("Method not allowed", 405);
 
@@ -147,7 +118,6 @@ Deno.serve(async (req) => {
         input,
         stream: true,
         store: false,
-        agent: { name: AGENT_NAME, version: AGENT_VERSION, type: "agent_reference" },
       }),
     });
 
