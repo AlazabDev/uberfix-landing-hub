@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
-import { supabase } from "@/integrations/supabase/client";
 import ChatMaintenanceForm from "./ChatMaintenanceForm";
 import ChatTrackingForm from "./ChatTrackingForm";
 
@@ -28,7 +27,7 @@ interface ChatBotPanelProps {
 }
 
 const WHATSAPP_NUMBER = "201028291995";
-const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/foundry-chat`;
 
 const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const { i18n } = useTranslation();
@@ -68,29 +67,11 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     ? ["ما هي خدمات الشركة؟", "أريد عرض سعر تشطيب", "ما هي أسعار التشطيبات؟", "ما هي فروع الشركة؟"]
     : ["What services do you offer?", "Get a finishing quote", "Finishing prices?", "Where are your branches?"];
 
-  const ensureConversation = useCallback(async () => {
-    if (conversationIdRef.current) return conversationIdRef.current;
-    const { data, error } = await supabase.rpc("create_chat_conversation", {
-      p_session_id: sessionIdRef.current,
-      p_language: i18n.language === "en" ? "en" : "ar",
-    });
-    if (error) { console.error(error); return null; }
-    conversationIdRef.current = data as string;
-    return conversationIdRef.current;
-  }, [i18n.language]);
-
-  const saveMessage = useCallback(async (role: "user" | "bot", content: string, messageType = "text", fileName?: string) => {
-    const convId = await ensureConversation();
-    if (!convId || !content.trim()) return;
-    const { error } = await supabase.rpc("insert_chat_message", {
-      p_conversation_id: convId,
-      p_role: role,
-      p_content: content,
-      p_message_type: messageType,
-      p_file_name: fileName || null,
-    });
-    if (error) console.error(error);
-  }, [ensureConversation]);
+  // Public chat: no authentication and no server-side conversation storage.
+  // History lives only in this component's state for the current session.
+  const saveMessage = useCallback((_role: "user" | "bot", _content: string, _type?: string, _fileName?: string) => {
+    /* intentionally not persisted */
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
