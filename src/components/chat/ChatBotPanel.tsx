@@ -12,6 +12,24 @@ import ReactMarkdown from "react-markdown";
 import ChatMaintenanceForm from "./ChatMaintenanceForm";
 import ChatTrackingForm from "./ChatTrackingForm";
 
+interface SpeechRecognitionEventLike {
+  resultIndex: number;
+  results: ArrayLike<ArrayLike<{ transcript: string }> & { isFinal: boolean }>;
+}
+
+interface SpeechRecognitionLike {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  start: () => void;
+  stop: () => void;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onerror: (() => void) | null;
+  onend: (() => void) | null;
+}
+
+type SpeechRecognitionCtor = new () => SpeechRecognitionLike;
+
 interface Message {
   id: string;
   content: string;
@@ -40,6 +58,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [liveTranscript, setLiveTranscript] = useState("");
   const [showMaintenanceForm, setShowMaintenanceForm] = useState(false);
   const [showTrackingForm, setShowTrackingForm] = useState(false);
 
@@ -49,6 +68,8 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const recordingInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const speakRef = useRef<((text: string) => void) | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const conversationIdRef = useRef<string | null>(null);
   const sessionIdRef = useRef<string>("");
@@ -80,6 +101,8 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
   useEffect(() => () => {
     if (recordingInterval.current) clearInterval(recordingInterval.current);
     if (abortRef.current) abortRef.current.abort();
+    try { recognitionRef.current?.stop(); } catch { /* ignore */ }
+    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
   }, []);
 
   const transferToWhatsApp = useCallback(() => {
@@ -89,7 +112,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
   }, [messages, isRTL]);
 
-  const streamAIResponse = useCallback(async (allMessages: Message[]) => {
+  const streamAIResponse = useCallback(async (allMessages: Message[], opts?: { speakReply?: boolean }) => {
     setIsTyping(true);
     const history = allMessages.slice(-10).map(m => ({
       role: m.role === "bot" ? ("assistant" as const) : ("user" as const),
@@ -142,7 +165,10 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
           } catch { textBuffer = line + "\n" + textBuffer; break; }
         }
       }
-      if (assistantContent.trim()) saveMessage("bot", assistantContent);
+      if (assistantContent.trim()) {
+        saveMessage("bot", assistantContent);
+        if (opts?.speakReply) speakRef.current?.(assistantContent);
+      }
     } catch (error: unknown) {
       if (error instanceof DOMException && error.name === "AbortError") return;
       setIsTyping(false);
@@ -213,6 +239,8 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     u.lang = isRTL ? "ar-EG" : "en-US";
     window.speechSynthesis.speak(u);
   }, [isRTL]);
+
+  useEffect(() => { speakRef.current = speak; }, [speak]);
 
   const sendVoiceText = useCallback((text: string) => {
     const msg: Message = {
@@ -521,8 +549,13 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
                 : (isRTL ? "اضغط للتحدث مع عزبوت" : "Tap to speak with AzaBot")}
             </p>
             <p className="text-muted-foreground text-xs mt-1">
-              {isRTL ? "سيتم إرسال التسجيل بعد الإيقاف" : "Recording will be sent on stop"}
+              {isRTL ? "يتم تحويل كلامك لنص وإرساله للوكيل، والرد يُقرأ صوتياً" : "Your speech is transcribed, sent to the agent, and the reply is read aloud"}
             </p>
+            {liveTranscript && (
+              <p className="mt-3 text-sm text-foreground bg-muted rounded-xl px-3 py-2 max-w-[280px] mx-auto">
+                {liveTranscript}
+              </p>
+            )}
           </div>
           <button onClick={() => setTab("text")} className="text-xs text-muted-foreground hover:text-foreground underline">
             {isRTL ? "العودة للمحادثة النصية" : "Back to text chat"}
