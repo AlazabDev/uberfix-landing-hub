@@ -203,27 +203,98 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
     if (e.target) e.target.value = "";
   };
 
+  // --- Real voice chat: browser speech recognition in, speech synthesis out ---
+  const speak = useCallback((text: string) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    const clean = text.replace(/[*_#`>[\]()]/g, "").slice(0, 600);
+    if (!clean.trim()) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(clean);
+    u.lang = isRTL ? "ar-EG" : "en-US";
+    window.speechSynthesis.speak(u);
+  }, [isRTL]);
+
+  const sendVoiceText = useCallback((text: string) => {
+    const msg: Message = {
+      id: Date.now().toString(),
+      content: text,
+      role: "user",
+      timestamp: new Date(),
+      type: "voice",
+    };
+    const next = [...messages, msg];
+    setMessages(next);
+    streamAIResponse(next, { speakReply: true });
+  }, [messages, streamAIResponse]);
+
+  const stopRecognition = useCallback(() => {
+    setIsRecording(false);
+    if (recordingInterval.current) clearInterval(recordingInterval.current);
+    recordingInterval.current = null;
+    setRecordingTime(0);
+    try { recognitionRef.current?.stop(); } catch { /* ignore */ }
+  }, []);
+
   const handleVoice = () => {
-    if (isRecording) {
+    if (isRecording) { stopRecognition(); return; }
+
+    const SR =
+      (window as unknown as { SpeechRecognition?: SpeechRecognitionCtor; webkitSpeechRecognition?: SpeechRecognitionCtor })
+        .SpeechRecognition ??
+      (window as unknown as { webkitSpeechRecognition?: SpeechRecognitionCtor }).webkitSpeechRecognition;
+
+    if (!SR) {
+      toast({
+        title: isRTL ? "الصوت غير مدعوم" : "Voice unsupported",
+        description: isRTL
+          ? "متصفحك لا يدعم التعرف على الصوت. استخدم Chrome أو اكتب رسالتك."
+          : "This browser does not support speech recognition. Use Chrome or type instead.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const recognition = new SR();
+    recognition.lang = isRTL ? "ar-EG" : "en-US";
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognitionRef.current = recognition;
+
+    let finalText = "";
+    recognition.onresult = (event: SpeechRecognitionEventLike) => {
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const res = event.results[i];
+        if (res.isFinal) finalText += res[0].transcript;
+        else interim += res[0].transcript;
+      }
+      setLiveTranscript(finalText + interim);
+    };
+    recognition.onerror = () => {
+      stopRecognition();
+      toast({
+        title: isRTL ? "خطأ في التسجيل" : "Recording error",
+        description: isRTL ? "تعذر الوصول للميكروفون." : "Could not access the microphone.",
+        variant: "destructive",
+      });
+    };
+    recognition.onend = () => {
       setIsRecording(false);
       if (recordingInterval.current) clearInterval(recordingInterval.current);
-      const msg: Message = {
-        id: Date.now().toString(),
-        content: isRTL ? `🎙️ رسالة صوتية (${recordingTime}ث)` : `🎙️ Voice message (${recordingTime}s)`,
-        role: "user", timestamp: new Date(), type: "voice",
-      };
-      const next = [...messages, msg];
-      setMessages(next);
+      recordingInterval.current = null;
       setRecordingTime(0);
-      saveMessage("user", msg.content, "voice");
-      streamAIResponse(next);
-      setTab("text");
-    } else {
-      setIsRecording(true);
-      setRecordingTime(0);
-      recordingInterval.current = setInterval(() => setRecordingTime(p => p + 1), 1000);
-    }
+      const text = finalText.trim();
+      setLiveTranscript("");
+      if (text) sendVoiceText(text);
+    };
+
+    setLiveTranscript("");
+    setIsRecording(true);
+    setRecordingTime(0);
+    recordingInterval.current = setInterval(() => setRecordingTime(p => p + 1), 1000);
+    recognition.start();
   };
+
 
   const showWelcome = messages.length === 0 && !showMaintenanceForm && !showTrackingForm;
 
