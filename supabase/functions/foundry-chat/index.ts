@@ -166,8 +166,14 @@ Deno.serve(async (req) => {
                 const evt = JSON.parse(raw);
                 if (evt.type === "response.output_text.delta" && typeof evt.delta === "string") {
                   emit(evt.delta);
-                } else if (evt.type === "error" || evt.error) {
-                  console.error("Foundry stream error:", raw.slice(0, 500));
+                } else if (evt.type === "error" || evt.error || evt.type === "response.failed") {
+                  const msg =
+                    evt.error?.message ?? evt.response?.error?.message ?? "Unknown agent error";
+                  console.error("Foundry stream error:", raw.slice(0, 800));
+                  // Never fail silently: surface the agent error to the user.
+                  controller.enqueue(
+                    encoder.encode(`data: ${JSON.stringify({ error: msg })}\n\n`),
+                  );
                 }
               } catch {
                 // partial JSON — push back and wait for more bytes

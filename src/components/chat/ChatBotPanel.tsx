@@ -156,6 +156,7 @@ const ChatBotPanel = ({ onClose }: ChatBotPanelProps) => {
           if (j === "[DONE]") { done = true; break; }
           try {
             const parsed = JSON.parse(j);
+            if (parsed.error) throw new Error(String(parsed.error));
             const c = parsed.choices?.[0]?.delta?.content as string | undefined;
             if (c) {
               assistantContent += c;
